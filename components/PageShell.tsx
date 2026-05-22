@@ -9,7 +9,7 @@ export function PageShell({
 }: {
   breadcrumb?: ReactNode;
   title: string;
-  subtitle?: string;
+  subtitle?: ReactNode;
   actions?: ReactNode;
   children: ReactNode;
 }) {
