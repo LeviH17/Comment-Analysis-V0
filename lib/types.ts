@@ -65,9 +65,24 @@ export type AnalysisRun = {
   droppedPostIds: string[];
 };
 
+export type ThemeCategory =
+  | "Economic"
+  | "Social"
+  | "Governance"
+  | "Media"
+  | "Health"
+  | "Engineering"
+  | "Generic";
+
+export type ThemeEmergence = "rising" | "stable" | "declining";
+
 export type Theme = {
   label: string;
   count: number;
+  engagement: number;
+  sentiment: Sentiment;
+  emergence: ThemeEmergence;
+  category: ThemeCategory;
   sample: string;
 };
 

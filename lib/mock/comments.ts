@@ -11,7 +11,7 @@ export const comments: Comment[] = [
     likes: 1_840,
     replies: 42,
     sentiment: "negative",
-    themes: ["engineering criticism", "advance knowledge"],
+    themes: ["Rivian R1S BMS Validation Failures", "Pre-Production Engineering Warnings Ignored"],
     pathways: ["post", "creator"],
   },
   {
@@ -23,7 +23,7 @@ export const comments: Comment[] = [
     likes: 2_140,
     replies: 184,
     sentiment: "negative",
-    themes: ["owner frustration", "service capacity"],
+    themes: ["Rivian Owner Service Capacity Gap"],
     pathways: ["post", "creator"],
   },
   {
@@ -35,7 +35,7 @@ export const comments: Comment[] = [
     likes: 4_120,
     replies: 92,
     sentiment: "positive",
-    themes: ["creator trust", "OEM communication"],
+    themes: ["EV Teardown Channel Credibility Boost", "Rivian PR Communication Failures"],
     pathways: ["post", "creator"],
   },
   {
@@ -47,7 +47,7 @@ export const comments: Comment[] = [
     likes: 612,
     replies: 28,
     sentiment: "neutral",
-    themes: ["litigation", "regulatory"],
+    themes: ["Pending Rivian Litigation Risk", "NHTSA Federal Mandate Pressure"],
     pathways: ["post", "creator", "search"],
   },
   {
@@ -59,7 +59,11 @@ export const comments: Comment[] = [
     likes: 8_240,
     replies: 412,
     sentiment: "negative",
-    themes: ["whistleblower", "engineering criticism", "advance knowledge"],
+    themes: [
+      "Anonymous Engineer Whistleblower Claims",
+      "Rivian R1S BMS Validation Failures",
+      "Pre-Production Engineering Warnings Ignored",
+    ],
     pathways: ["post", "creator", "search"],
   },
   {
@@ -71,7 +75,7 @@ export const comments: Comment[] = [
     likes: 1_240,
     replies: 96,
     sentiment: "negative",
-    themes: ["advance knowledge", "dealer network"],
+    themes: ["Pre-Production Engineering Warnings Ignored", "Dealership Network Forewarning"],
     pathways: ["post", "creator"],
   },
   {
@@ -83,7 +87,7 @@ export const comments: Comment[] = [
     likes: 3_840,
     replies: 184,
     sentiment: "mixed",
-    themes: ["purchase decision", "creator trust"],
+    themes: ["Mass Reservation Cancellations", "EV Teardown Channel Credibility Boost"],
     pathways: ["post", "creator"],
   },
 
@@ -97,7 +101,7 @@ export const comments: Comment[] = [
     likes: 412,
     replies: 18,
     sentiment: "positive",
-    themes: ["expert support", "policy resistance"],
+    themes: ["PM2.5 Public Health Education Need", "Rural Stove Ban Resistance"],
     pathways: ["creator"],
   },
   {
@@ -109,7 +113,7 @@ export const comments: Comment[] = [
     likes: 1_840,
     replies: 142,
     sentiment: "negative",
-    themes: ["affordability concern", "rural pushback"],
+    themes: ["Heating Cost Affordability Crisis", "Rural Stove Ban Resistance"],
     pathways: ["creator"],
   },
   {
@@ -121,7 +125,7 @@ export const comments: Comment[] = [
     likes: 612,
     replies: 24,
     sentiment: "positive",
-    themes: ["public health framing", "policy approach"],
+    themes: ["PM2.5 Public Health Education Need"],
     pathways: ["creator"],
   },
   {
@@ -133,7 +137,7 @@ export const comments: Comment[] = [
     likes: 318,
     replies: 42,
     sentiment: "neutral",
-    themes: ["affordability concern", "implementation gaps"],
+    themes: ["Heating Cost Affordability Crisis", "Policy Implementation Gaps for Vulnerable Renters"],
     pathways: ["creator"],
   },
 
@@ -147,7 +151,7 @@ export const comments: Comment[] = [
     likes: 218,
     replies: 12,
     sentiment: "positive",
-    themes: ["policy implications", "expert support"],
+    themes: ["Cross-Border Air Pollution Policy"],
     pathways: ["creator"],
   },
   {
@@ -159,7 +163,7 @@ export const comments: Comment[] = [
     likes: 482,
     replies: 86,
     sentiment: "negative",
-    themes: ["framing critique"],
+    themes: ["Selective Air Pollution Framing Critique"],
     pathways: ["creator"],
   },
 
@@ -173,7 +177,7 @@ export const comments: Comment[] = [
     likes: 184,
     replies: 8,
     sentiment: "positive",
-    themes: ["sensor coverage", "rural California"],
+    themes: ["Central Valley Sensor Coverage Gaps"],
     pathways: ["creator"],
   },
   {
@@ -185,7 +189,7 @@ export const comments: Comment[] = [
     likes: 312,
     replies: 24,
     sentiment: "negative",
-    themes: ["forecast credibility", "drought concern"],
+    themes: ["Wildfire Forecast Drought Model Concerns"],
     pathways: ["creator", "search"],
   },
   {
@@ -197,7 +201,7 @@ export const comments: Comment[] = [
     likes: 96,
     replies: 14,
     sentiment: "neutral",
-    themes: ["transparency", "partnership questions"],
+    themes: ["Air Quality Data Transparency Push"],
     pathways: ["creator"],
   },
   {
@@ -209,7 +213,7 @@ export const comments: Comment[] = [
     likes: 248,
     replies: 32,
     sentiment: "negative",
-    themes: ["personal stakes", "central valley", "sensor coverage"],
+    themes: ["Pregnant Mothers' Wildfire Smoke Concerns", "Central Valley Sensor Coverage Gaps"],
     pathways: ["creator", "search"],
   },
 
@@ -223,7 +227,7 @@ export const comments: Comment[] = [
     likes: 4_120,
     replies: 84,
     sentiment: "positive",
-    themes: ["brand preference", "convenience"],
+    themes: ["Target Brand App Convenience Preference"],
     pathways: ["creator"],
   },
   {
@@ -235,7 +239,7 @@ export const comments: Comment[] = [
     likes: 8_400,
     replies: 320,
     sentiment: "negative",
-    themes: ["methodology critique"],
+    themes: ["BTS Haul Methodology Critique"],
     pathways: ["creator"],
   },
   {
@@ -247,7 +251,7 @@ export const comments: Comment[] = [
     likes: 14_200,
     replies: 612,
     sentiment: "neutral",
-    themes: ["teacher perspective", "affordability"],
+    themes: ["Teacher Voice on School Supply Lists", "School Supply List Affordability Crisis"],
     pathways: ["creator", "search"],
   },
   {
@@ -259,7 +263,7 @@ export const comments: Comment[] = [
     likes: 6_240,
     replies: 218,
     sentiment: "negative",
-    themes: ["school list complexity", "affordability"],
+    themes: ["School Supply List Affordability Crisis"],
     pathways: ["creator", "search"],
   },
   {
@@ -271,7 +275,7 @@ export const comments: Comment[] = [
     likes: 2_140,
     replies: 18,
     sentiment: "positive",
-    themes: ["creator trust", "content quality"],
+    themes: ["BTS Haul Methodology Critique"],
     pathways: ["creator"],
   },
 
@@ -285,7 +289,7 @@ export const comments: Comment[] = [
     likes: 6_120,
     replies: 184,
     sentiment: "negative",
-    themes: ["sponsorship disclosure", "creator integrity"],
+    themes: ["Influencer Sponsorship Disclosure Concerns"],
     pathways: ["creator", "search"],
   },
   {
@@ -297,7 +301,7 @@ export const comments: Comment[] = [
     likes: 2_840,
     replies: 42,
     sentiment: "positive",
-    themes: ["purchase decision"],
+    themes: ["Mom-Influencer Purchase Recommendations"],
     pathways: ["creator"],
   },
   {
@@ -309,7 +313,7 @@ export const comments: Comment[] = [
     likes: 4_120,
     replies: 96,
     sentiment: "negative",
-    themes: ["sponsorship volume", "creator integrity"],
+    themes: ["SuburbMomTok Sponsorship Volume Critique"],
     pathways: ["creator"],
   },
 
@@ -323,7 +327,7 @@ export const comments: Comment[] = [
     likes: 412,
     replies: 18,
     sentiment: "neutral",
-    themes: ["litigation", "regulatory"],
+    themes: ["Pending Rivian Litigation Risk", "NHTSA Federal Mandate Pressure"],
     pathways: ["creator", "search"],
   },
   {
@@ -335,7 +339,7 @@ export const comments: Comment[] = [
     likes: 920,
     replies: 142,
     sentiment: "negative",
-    themes: ["regulatory pressure"],
+    themes: ["NHTSA Federal Mandate Pressure"],
     pathways: ["creator", "search"],
   },
 
@@ -349,7 +353,7 @@ export const comments: Comment[] = [
     likes: 614,
     replies: 28,
     sentiment: "negative",
-    themes: ["school policy", "personal stakes"],
+    themes: ["School Closure AQI Trigger Policy Gap"],
     pathways: ["creator", "search"],
   },
   {
@@ -361,7 +365,7 @@ export const comments: Comment[] = [
     likes: 412,
     replies: 16,
     sentiment: "negative",
-    themes: ["new normal", "personal protection"],
+    themes: ["Wildfire Smoke As Routine Concern", "N95 Mask Permanent Adoption"],
     pathways: ["creator", "search"],
   },
   {
@@ -373,7 +377,7 @@ export const comments: Comment[] = [
     likes: 280,
     replies: 14,
     sentiment: "negative",
-    themes: ["clinical impact", "expert support"],
+    themes: ["Asthma Clinic Surge Reports"],
     pathways: ["creator", "search"],
   },
 
@@ -387,7 +391,7 @@ export const comments: Comment[] = [
     likes: 8_400,
     replies: 184,
     sentiment: "positive",
-    themes: ["teacher perspective"],
+    themes: ["Teacher Voice on School Supply Lists"],
     pathways: ["creator"],
   },
   {
@@ -399,7 +403,7 @@ export const comments: Comment[] = [
     likes: 12_400,
     replies: 412,
     sentiment: "negative",
-    themes: ["school funding", "systemic critique"],
+    themes: ["Property Tax / Classroom Supply Gap"],
     pathways: ["creator", "search"],
   },
 
@@ -413,7 +417,7 @@ export const comments: Comment[] = [
     likes: 1_840,
     replies: 42,
     sentiment: "positive",
-    themes: ["creator trust", "OEM communication"],
+    themes: ["RecallReporter Source Credibility", "Rivian PR Communication Failures"],
     pathways: ["post", "creator", "search"],
   },
   {
@@ -425,7 +429,7 @@ export const comments: Comment[] = [
     likes: 3_240,
     replies: 184,
     sentiment: "negative",
-    themes: ["regulatory data", "scope concern"],
+    themes: ["NHTSA VIN Range Data Discrepancy", "Rivian Recall Scope Underdisclosure"],
     pathways: ["post", "creator", "search"],
   },
   {
@@ -437,7 +441,7 @@ export const comments: Comment[] = [
     likes: 920,
     replies: 78,
     sentiment: "negative",
-    themes: ["purchase decision", "OEM trust"],
+    themes: ["Mass Reservation Cancellations"],
     pathways: ["post", "creator", "search"],
   },
 
@@ -451,7 +455,7 @@ export const comments: Comment[] = [
     likes: 2_140,
     replies: 84,
     sentiment: "positive",
-    themes: ["engineering depth", "expert support"],
+    themes: ["SOC Estimation Drift Engineering Discussion", "EV Teardown Channel Credibility Boost"],
     pathways: ["creator"],
   },
   {
@@ -463,7 +467,7 @@ export const comments: Comment[] = [
     likes: 4_120,
     replies: 612,
     sentiment: "negative",
-    themes: ["anti-EV sentiment"],
+    themes: ["Anti-EV Cultural Pushback"],
     pathways: ["creator"],
   },
 
@@ -477,7 +481,7 @@ export const comments: Comment[] = [
     likes: 412,
     replies: 18,
     sentiment: "positive",
-    themes: ["transparency", "regulatory"],
+    themes: ["Air Quality Data Transparency Push"],
     pathways: ["creator", "search"],
   },
   {
@@ -489,7 +493,7 @@ export const comments: Comment[] = [
     likes: 184,
     replies: 32,
     sentiment: "neutral",
-    themes: ["industry pushback", "transparency"],
+    themes: ["Air Quality Industry Coalition Pushback"],
     pathways: ["creator"],
   },
 
@@ -503,7 +507,7 @@ export const comments: Comment[] = [
     likes: 14_200,
     replies: 420,
     sentiment: "positive",
-    themes: ["teacher perspective", "special education"],
+    themes: ["Teacher Voice on School Supply Lists", "IEP Auditory Accommodation Need"],
     pathways: ["creator"],
   },
   {
@@ -515,7 +519,7 @@ export const comments: Comment[] = [
     likes: 2_840,
     replies: 612,
     sentiment: "negative",
-    themes: ["generational pushback"],
+    themes: ["Generational Headphone Necessity Debate"],
     pathways: ["creator"],
   },
 
@@ -529,7 +533,7 @@ export const comments: Comment[] = [
     likes: 320,
     replies: 14,
     sentiment: "positive",
-    themes: ["independent data", "creator trust"],
+    themes: ["Independent AHAM CADR Validation"],
     pathways: ["creator"],
   },
 
@@ -543,7 +547,10 @@ export const comments: Comment[] = [
     likes: 6_240,
     replies: 318,
     sentiment: "negative",
-    themes: ["whistleblower", "engineering criticism", "advance knowledge"],
+    themes: [
+      "Cross-Brand Validation Compression Concerns",
+      "Anonymous Engineer Whistleblower Claims",
+    ],
     pathways: ["post", "creator", "search"],
   },
   {
@@ -555,7 +562,7 @@ export const comments: Comment[] = [
     likes: 1_240,
     replies: 96,
     sentiment: "neutral",
-    themes: ["skepticism", "evidence standards"],
+    themes: ["Whistleblower Claim Evidence Standards"],
     pathways: ["post", "creator", "search"],
   },
 ];

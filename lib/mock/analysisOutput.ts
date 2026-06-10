@@ -3,10 +3,12 @@ import type {
   Comment,
   CommentAnalysisOutput,
   NotableComment,
+  Sentiment,
   Theme,
   VolumePoint,
 } from "@/lib/types";
 import { comments as allComments } from "@/lib/mock/comments";
+import { themeMeta } from "@/lib/mock/themesCatalog";
 
 const SUMMARIES: Record<string, string> = {
   // post-level
@@ -60,22 +62,63 @@ function aggregateSentiment(comments: Comment[]): CommentAnalysisOutput["sentime
   };
 }
 
+function dominantSentiment(counts: Record<Sentiment, number>): Sentiment {
+  let top: Sentiment = "neutral";
+  let max = -1;
+  (Object.entries(counts) as Array<[Sentiment, number]>).forEach(([s, n]) => {
+    if (n > max) {
+      top = s;
+      max = n;
+    }
+  });
+  return top;
+}
+
 function aggregateThemes(comments: Comment[]): Theme[] {
-  const byLabel = new Map<string, { count: number; sample: string }>();
+  type Acc = {
+    count: number;
+    engagement: number;
+    sample: string;
+    sampleLikes: number;
+    sentiments: Record<Sentiment, number>;
+  };
+  const byLabel = new Map<string, Acc>();
   for (const c of comments) {
     for (const label of c.themes) {
       const cur = byLabel.get(label);
       if (cur) {
         cur.count += 1;
+        cur.engagement += c.likes;
+        cur.sentiments[c.sentiment] += 1;
+        if (c.likes > cur.sampleLikes) {
+          cur.sample = c.body;
+          cur.sampleLikes = c.likes;
+        }
       } else {
-        byLabel.set(label, { count: 1, sample: c.body });
+        byLabel.set(label, {
+          count: 1,
+          engagement: c.likes,
+          sample: c.body,
+          sampleLikes: c.likes,
+          sentiments: { positive: 0, neutral: 0, negative: 0, mixed: 0, [c.sentiment]: 1 } as Record<Sentiment, number>,
+        });
       }
     }
   }
   return Array.from(byLabel.entries())
-    .map(([label, v]) => ({ label, count: v.count, sample: v.sample }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 8);
+    .map(([label, v]) => {
+      const meta = themeMeta(label);
+      return {
+        label,
+        count: v.count,
+        engagement: v.engagement,
+        sample: v.sample,
+        sentiment: dominantSentiment(v.sentiments),
+        emergence: meta.emergence,
+        category: meta.category,
+      };
+    })
+    .sort((a, b) => b.engagement - a.engagement);
 }
 
 function notableComments(comments: Comment[]): NotableComment[] {
@@ -86,12 +129,20 @@ function notableComments(comments: Comment[]): NotableComment[] {
   }));
 }
 
+function themeContains(themes: string[], needle: string): boolean {
+  const n = needle.toLowerCase();
+  return themes.some((t) => t.toLowerCase().includes(n));
+}
+
 function notableReason(c: Comment): string {
-  if (c.themes.includes("whistleblower")) return "Whistleblower-style claim with high amplification";
-  if (c.themes.includes("teacher perspective")) return "Teacher-voice amplifier in this audience";
-  if (c.themes.includes("creator trust")) return "Strongest expression of audience trust";
-  if (c.themes.includes("sponsorship disclosure")) return "Sponsorship critique with broad agreement";
-  if (c.themes.includes("clinical impact")) return "Clinical voice raising urgency";
+  if (themeContains(c.themes, "Whistleblower")) return "Whistleblower-style claim with high amplification";
+  if (themeContains(c.themes, "Teacher Voice")) return "Teacher-voice amplifier in this audience";
+  if (themeContains(c.themes, "Credibility")) return "Strongest expression of audience trust";
+  if (themeContains(c.themes, "Sponsorship Disclosure")) return "Sponsorship critique with broad agreement";
+  if (themeContains(c.themes, "Asthma") || themeContains(c.themes, "Pregnant"))
+    return "Clinical / personal voice raising urgency";
+  if (themeContains(c.themes, "Reservation Cancellations")) return "Concrete consumer attrition signal";
+  if (themeContains(c.themes, "VIN Range")) return "Scope-disclosure concern with sourcing";
   if (c.likes > 5000) return "Top-engagement comment in this set";
   return "Representative high-engagement comment";
 }
@@ -106,34 +157,39 @@ function audienceSignals(comments: Comment[]): AudienceSignal[] {
     note: (count: number) => string;
   }> = [
     {
-      match: (t) => t.includes("trust") || t.includes("creator"),
+      match: (t) => /credibility|credible/i.test(t),
       label: "Creator trust",
-      note: (n) => `Surfaced in ${n} top comments — audience treats this creator as a credible voice`,
+      note: (n) => `Surfaced in ${n} themed comments — audience treats this creator as a credible voice`,
     },
     {
-      match: (t) => t.includes("whistleblower") || t.includes("advance knowledge"),
+      match: (t) => /whistleblower|warnings ignored|vin range|underdisclosure|compression/i.test(t),
       label: "Accountability pressure",
-      note: (n) => `Whistleblower / advance-knowledge claims in ${n} comments — narrative moving to accountability`,
+      note: (n) => `Whistleblower / scope-disclosure claims in ${n} comments — narrative moving to accountability`,
     },
     {
-      match: (t) => t.includes("sponsorship") || t.includes("integrity"),
+      match: (t) => /sponsorship/i.test(t),
       label: "Sponsorship fatigue",
-      note: (n) => `Sponsorship disclosure / integrity concerns in ${n} comments`,
+      note: (n) => `Sponsorship disclosure / volume concerns in ${n} comments`,
     },
     {
-      match: (t) => t.includes("affordability") || t.includes("funding"),
+      match: (t) => /affordability|supply.*gap|heating cost/i.test(t),
       label: "Affordability concern",
       note: (n) => `Cost / affordability surfaced in ${n} comments`,
     },
     {
-      match: (t) => t.includes("teacher") || t.includes("school"),
+      match: (t) => /teacher|iep|school/i.test(t),
       label: "Teacher / institution voices",
       note: (n) => `Teacher / school-staff perspectives in ${n} comments — high engagement multiplier`,
     },
     {
-      match: (t) => t.includes("personal stakes") || t.includes("clinical"),
+      match: (t) => /asthma|pregnant|smoke|n95|public health/i.test(t),
       label: "Direct personal impact",
-      note: (n) => `Personal-impact framing in ${n} comments — urgency rising`,
+      note: (n) => `Personal / clinical impact in ${n} comments — urgency rising`,
+    },
+    {
+      match: (t) => /cancellation|service capacity|pr communication/i.test(t),
+      label: "Consumer attrition",
+      note: (n) => `Owner / buyer attrition signals in ${n} comments`,
     },
   ];
 
