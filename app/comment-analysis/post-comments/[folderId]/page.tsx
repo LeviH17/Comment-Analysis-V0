@@ -10,7 +10,7 @@ import { AudienceSignals } from "@/components/analysis/AudienceSignals";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { CommentFeed } from "@/components/analysis/CommentFeed";
 import { MetricCard } from "@/components/MetricCard";
-import { PostCard } from "@/components/post/PostCard";
+import { PostPreview } from "@/components/post/PostPreview";
 import { getFolder } from "@/lib/mock/folders";
 import { getPost } from "@/lib/mock/posts";
 import { commentsForPosts } from "@/lib/mock/comments";
@@ -91,7 +91,7 @@ export default async function FolderDetailPage({
             <ul className="mt-3 space-y-2.5">
               {posts.map((p) => (
                 <li key={p.id}>
-                  <PostCard
+                  <PostPreview
                     post={p}
                     href={`/comment-analysis/post-comments/${folder.id}/post/${p.id}`}
                   />
