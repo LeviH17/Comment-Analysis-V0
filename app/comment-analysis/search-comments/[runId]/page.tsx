@@ -5,6 +5,7 @@ import { PageShell } from "@/components/PageShell";
 import { ExecutiveSummary } from "@/components/analysis/ExecutiveSummary";
 import { SentimentDonut } from "@/components/analysis/SentimentDonut";
 import { ThemeChips } from "@/components/analysis/ThemeChips";
+import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { NotableComments } from "@/components/analysis/NotableComments";
 import { AudienceSignals } from "@/components/analysis/AudienceSignals";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
@@ -76,7 +77,20 @@ export default async function AnalysisRunDetailPage({
           <ExecutiveSummary text={analysis.executiveSummary} />
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <SentimentDonut sentiment={analysis.sentiment} total={analysis.totalComments} />
+            <div className="space-y-4">
+              <SentimentDonut sentiment={analysis.sentiment} total={analysis.totalComments} />
+              <DemographicsBars title="Commenter age" buckets={analysis.demographics.age} />
+              <DemographicsBars
+                title="Commenter gender"
+                buckets={analysis.demographics.gender}
+                formatLabel={capitalize}
+              />
+              <DemographicsBars
+                title="Commenter location"
+                buckets={analysis.demographics.country}
+                limit={5}
+              />
+            </div>
             <ThemeChips themes={analysis.themes} />
           </div>
 

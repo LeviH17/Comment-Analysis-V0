@@ -13,6 +13,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["Rivian R1S BMS Validation Failures", "Pre-Production Engineering Warnings Ignored"],
     pathways: ["post", "creator"],
+    authorAge: "35-44",
+    authorGender: "male",
+    authorCountry: "United States",
   },
   {
     id: "c-001-02",
@@ -25,6 +28,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["Rivian Owner Service Capacity Gap"],
     pathways: ["post", "creator"],
+    authorAge: "35-44",
+    authorGender: "male",
+    authorCountry: "United States",
   },
   {
     id: "c-001-03",
@@ -37,6 +43,9 @@ export const comments: Comment[] = [
     sentiment: "positive",
     themes: ["EV Teardown Channel Credibility Boost", "Rivian PR Communication Failures"],
     pathways: ["post", "creator"],
+    authorAge: "25-34",
+    authorGender: "male",
+    authorCountry: "United States",
   },
   {
     id: "c-001-04",
@@ -49,6 +58,9 @@ export const comments: Comment[] = [
     sentiment: "neutral",
     themes: ["Pending Rivian Litigation Risk", "NHTSA Federal Mandate Pressure"],
     pathways: ["post", "creator", "search"],
+    authorAge: "45-54",
+    authorGender: "male",
+    authorCountry: "United States",
   },
   {
     id: "c-001-05",
@@ -65,6 +77,9 @@ export const comments: Comment[] = [
       "Pre-Production Engineering Warnings Ignored",
     ],
     pathways: ["post", "creator", "search"],
+    authorAge: "35-44",
+    authorGender: "male",
+    authorCountry: "United States",
   },
   {
     id: "c-001-06",
@@ -77,6 +92,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["Pre-Production Engineering Warnings Ignored", "Dealership Network Forewarning"],
     pathways: ["post", "creator"],
+    authorAge: "25-34",
+    authorGender: "female",
+    authorCountry: "United States",
   },
   {
     id: "c-001-07",
@@ -89,6 +107,9 @@ export const comments: Comment[] = [
     sentiment: "mixed",
     themes: ["Mass Reservation Cancellations", "EV Teardown Channel Credibility Boost"],
     pathways: ["post", "creator"],
+    authorAge: "25-34",
+    authorGender: "male",
+    authorCountry: "Canada",
   },
 
   // post-002 (Maria — wood-burning stoves UK)
@@ -103,6 +124,9 @@ export const comments: Comment[] = [
     sentiment: "positive",
     themes: ["PM2.5 Public Health Education Need", "Rural Stove Ban Resistance"],
     pathways: ["creator"],
+    authorAge: "45-54",
+    authorGender: "male",
+    authorCountry: "United Kingdom",
   },
   {
     id: "c-002-02",
@@ -115,6 +139,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["Heating Cost Affordability Crisis", "Rural Stove Ban Resistance"],
     pathways: ["creator"],
+    authorAge: "55-64",
+    authorGender: "male",
+    authorCountry: "United Kingdom",
   },
   {
     id: "c-002-03",
@@ -127,6 +154,9 @@ export const comments: Comment[] = [
     sentiment: "positive",
     themes: ["PM2.5 Public Health Education Need"],
     pathways: ["creator"],
+    authorAge: "35-44",
+    authorGender: "female",
+    authorCountry: "United Kingdom",
   },
   {
     id: "c-002-04",
@@ -139,6 +169,9 @@ export const comments: Comment[] = [
     sentiment: "neutral",
     themes: ["Heating Cost Affordability Crisis", "Policy Implementation Gaps for Vulnerable Renters"],
     pathways: ["creator"],
+    authorAge: "25-34",
+    authorGender: "non-binary",
+    authorCountry: "United Kingdom",
   },
 
   // post-003 (Maria — Arabian Gulf air pollution)
@@ -153,6 +186,9 @@ export const comments: Comment[] = [
     sentiment: "positive",
     themes: ["Cross-Border Air Pollution Policy"],
     pathways: ["creator"],
+    authorAge: "45-54",
+    authorGender: "female",
+    authorCountry: "United Arab Emirates",
   },
   {
     id: "c-003-02",
@@ -165,6 +201,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["Selective Air Pollution Framing Critique"],
     pathways: ["creator"],
+    authorAge: "35-44",
+    authorGender: "male",
+    authorCountry: "Saudi Arabia",
   },
 
   // post-004 (CARB — wildfire briefing)
@@ -179,6 +218,9 @@ export const comments: Comment[] = [
     sentiment: "positive",
     themes: ["Central Valley Sensor Coverage Gaps"],
     pathways: ["creator"],
+    authorAge: "55-64",
+    authorGender: "male",
+    authorCountry: "United States",
   },
   {
     id: "c-004-02",
@@ -191,6 +233,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["Wildfire Forecast Drought Model Concerns"],
     pathways: ["creator", "search"],
+    authorAge: "45-54",
+    authorGender: "female",
+    authorCountry: "United States",
   },
   {
     id: "c-004-03",
@@ -203,6 +248,9 @@ export const comments: Comment[] = [
     sentiment: "neutral",
     themes: ["Air Quality Data Transparency Push"],
     pathways: ["creator"],
+    authorAge: "25-34",
+    authorGender: "male",
+    authorCountry: "United States",
   },
   {
     id: "c-004-04",
@@ -215,6 +263,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["Pregnant Mothers' Wildfire Smoke Concerns", "Central Valley Sensor Coverage Gaps"],
     pathways: ["creator", "search"],
+    authorAge: "25-34",
+    authorGender: "female",
+    authorCountry: "United States",
   },
 
   // post-005 (SuburbMomTok — Target vs Walmart back to school)
@@ -229,6 +280,9 @@ export const comments: Comment[] = [
     sentiment: "positive",
     themes: ["Target Brand App Convenience Preference"],
     pathways: ["creator"],
+    authorAge: "25-34",
+    authorGender: "female",
+    authorCountry: "United States",
   },
   {
     id: "c-005-02",
@@ -241,6 +295,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["BTS Haul Methodology Critique"],
     pathways: ["creator"],
+    authorAge: "35-44",
+    authorGender: "male",
+    authorCountry: "United States",
   },
   {
     id: "c-005-03",
@@ -253,6 +310,9 @@ export const comments: Comment[] = [
     sentiment: "neutral",
     themes: ["Teacher Voice on School Supply Lists", "School Supply List Affordability Crisis"],
     pathways: ["creator", "search"],
+    authorAge: "35-44",
+    authorGender: "female",
+    authorCountry: "United States",
   },
   {
     id: "c-005-04",
@@ -265,6 +325,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["School Supply List Affordability Crisis"],
     pathways: ["creator", "search"],
+    authorAge: "35-44",
+    authorGender: "male",
+    authorCountry: "United States",
   },
   {
     id: "c-005-05",
@@ -277,6 +340,9 @@ export const comments: Comment[] = [
     sentiment: "positive",
     themes: ["BTS Haul Methodology Critique"],
     pathways: ["creator"],
+    authorAge: "25-34",
+    authorGender: "female",
+    authorCountry: "United States",
   },
 
   // post-006 (SuburbMomTok — sponsored backpacks)
@@ -291,6 +357,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["Influencer Sponsorship Disclosure Concerns"],
     pathways: ["creator", "search"],
+    authorAge: "18-24",
+    authorGender: "female",
+    authorCountry: "United States",
   },
   {
     id: "c-006-02",
@@ -303,6 +372,9 @@ export const comments: Comment[] = [
     sentiment: "positive",
     themes: ["Mom-Influencer Purchase Recommendations"],
     pathways: ["creator"],
+    authorAge: "25-34",
+    authorGender: "female",
+    authorCountry: "United States",
   },
   {
     id: "c-006-03",
@@ -315,6 +387,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["SuburbMomTok Sponsorship Volume Critique"],
     pathways: ["creator"],
+    authorAge: "25-34",
+    authorGender: "male",
+    authorCountry: "United States",
   },
 
   // post-007 (Policy Watch — House Energy Committee hearing)
@@ -329,6 +404,9 @@ export const comments: Comment[] = [
     sentiment: "neutral",
     themes: ["Pending Rivian Litigation Risk", "NHTSA Federal Mandate Pressure"],
     pathways: ["creator", "search"],
+    authorAge: "35-44",
+    authorGender: "female",
+    authorCountry: "United States",
   },
   {
     id: "c-007-02",
@@ -341,6 +419,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["NHTSA Federal Mandate Pressure"],
     pathways: ["creator", "search"],
+    authorAge: "45-54",
+    authorGender: "male",
+    authorCountry: "United States",
   },
 
   // post-008 (Air Quality Now — Fresno AQI)
@@ -355,6 +436,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["School Closure AQI Trigger Policy Gap"],
     pathways: ["creator", "search"],
+    authorAge: "35-44",
+    authorGender: "female",
+    authorCountry: "United States",
   },
   {
     id: "c-008-02",
@@ -367,6 +451,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["Wildfire Smoke As Routine Concern", "N95 Mask Permanent Adoption"],
     pathways: ["creator", "search"],
+    authorAge: "25-34",
+    authorGender: "female",
+    authorCountry: "United States",
   },
   {
     id: "c-008-03",
@@ -379,6 +466,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["Asthma Clinic Surge Reports"],
     pathways: ["creator", "search"],
+    authorAge: "45-54",
+    authorGender: "female",
+    authorCountry: "United States",
   },
 
   // post-009 (Parent Trending — back to school list)
@@ -393,6 +483,9 @@ export const comments: Comment[] = [
     sentiment: "positive",
     themes: ["Teacher Voice on School Supply Lists"],
     pathways: ["creator"],
+    authorAge: "35-44",
+    authorGender: "female",
+    authorCountry: "United States",
   },
   {
     id: "c-009-02",
@@ -405,6 +498,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["Property Tax / Classroom Supply Gap"],
     pathways: ["creator", "search"],
+    authorAge: "35-44",
+    authorGender: "female",
+    authorCountry: "United States",
   },
 
   // post-010 (RecallReporter — Rivian weekly update)
@@ -419,6 +515,9 @@ export const comments: Comment[] = [
     sentiment: "positive",
     themes: ["RecallReporter Source Credibility", "Rivian PR Communication Failures"],
     pathways: ["post", "creator", "search"],
+    authorAge: "35-44",
+    authorGender: "male",
+    authorCountry: "United States",
   },
   {
     id: "c-010-02",
@@ -431,6 +530,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["NHTSA VIN Range Data Discrepancy", "Rivian Recall Scope Underdisclosure"],
     pathways: ["post", "creator", "search"],
+    authorAge: "25-34",
+    authorGender: "male",
+    authorCountry: "United States",
   },
   {
     id: "c-010-03",
@@ -443,6 +545,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["Mass Reservation Cancellations"],
     pathways: ["post", "creator", "search"],
+    authorAge: "35-44",
+    authorGender: "male",
+    authorCountry: "Germany",
   },
 
   // post-011 (EV Teardown — thermal runaway)
@@ -457,6 +562,9 @@ export const comments: Comment[] = [
     sentiment: "positive",
     themes: ["SOC Estimation Drift Engineering Discussion", "EV Teardown Channel Credibility Boost"],
     pathways: ["creator"],
+    authorAge: "25-34",
+    authorGender: "male",
+    authorCountry: "United States",
   },
   {
     id: "c-011-02",
@@ -469,6 +577,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["Anti-EV Cultural Pushback"],
     pathways: ["creator"],
+    authorAge: "55-64",
+    authorGender: "male",
+    authorCountry: "United States",
   },
 
   // post-012 (Policy Watch — California SB-1247)
@@ -483,6 +594,9 @@ export const comments: Comment[] = [
     sentiment: "positive",
     themes: ["Air Quality Data Transparency Push"],
     pathways: ["creator", "search"],
+    authorAge: "35-44",
+    authorGender: "female",
+    authorCountry: "United States",
   },
   {
     id: "c-012-02",
@@ -495,6 +609,9 @@ export const comments: Comment[] = [
     sentiment: "neutral",
     themes: ["Air Quality Industry Coalition Pushback"],
     pathways: ["creator"],
+    authorAge: "45-54",
+    authorGender: "male",
+    authorCountry: "United States",
   },
 
   // post-013 (SuburbMomTok — noise-cancelling headphones)
@@ -509,6 +626,9 @@ export const comments: Comment[] = [
     sentiment: "positive",
     themes: ["Teacher Voice on School Supply Lists", "IEP Auditory Accommodation Need"],
     pathways: ["creator"],
+    authorAge: "35-44",
+    authorGender: "female",
+    authorCountry: "United States",
   },
   {
     id: "c-013-02",
@@ -521,6 +641,9 @@ export const comments: Comment[] = [
     sentiment: "negative",
     themes: ["Generational Headphone Necessity Debate"],
     pathways: ["creator"],
+    authorAge: "65+",
+    authorGender: "female",
+    authorCountry: "United States",
   },
 
   // post-014 (Air Quality Now — air purifiers)
@@ -535,6 +658,9 @@ export const comments: Comment[] = [
     sentiment: "positive",
     themes: ["Independent AHAM CADR Validation"],
     pathways: ["creator"],
+    authorAge: "25-34",
+    authorGender: "male",
+    authorCountry: "United States",
   },
 
   // post-015 (RecallReporter — cross-brand BMS)
@@ -552,6 +678,9 @@ export const comments: Comment[] = [
       "Anonymous Engineer Whistleblower Claims",
     ],
     pathways: ["post", "creator", "search"],
+    authorAge: "35-44",
+    authorGender: "male",
+    authorCountry: "United States",
   },
   {
     id: "c-015-02",
@@ -564,6 +693,9 @@ export const comments: Comment[] = [
     sentiment: "neutral",
     themes: ["Whistleblower Claim Evidence Standards"],
     pathways: ["post", "creator", "search"],
+    authorAge: "25-34",
+    authorGender: "male",
+    authorCountry: "United States",
   },
 ];
 

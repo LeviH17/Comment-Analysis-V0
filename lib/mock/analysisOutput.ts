@@ -1,7 +1,11 @@
 import type {
+  AgeRange,
   AudienceSignal,
   Comment,
   CommentAnalysisOutput,
+  DemographicBucket,
+  Demographics,
+  Gender,
   NotableComment,
   Sentiment,
   Theme,
@@ -205,6 +209,43 @@ function audienceSignals(comments: Comment[]): AudienceSignal[] {
   return out.slice(0, 5);
 }
 
+const AGE_ORDER: AgeRange[] = ["13-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"];
+const GENDER_ORDER: Gender[] = ["female", "male", "non-binary", "unknown"];
+
+function aggregateDemographics(comments: Comment[]): Demographics {
+  const total = comments.length || 1;
+
+  const ageCounts = new Map<AgeRange, number>();
+  const genderCounts = new Map<Gender, number>();
+  const countryCounts = new Map<string, number>();
+
+  for (const c of comments) {
+    ageCounts.set(c.authorAge, (ageCounts.get(c.authorAge) || 0) + 1);
+    genderCounts.set(c.authorGender, (genderCounts.get(c.authorGender) || 0) + 1);
+    countryCounts.set(c.authorCountry, (countryCounts.get(c.authorCountry) || 0) + 1);
+  }
+
+  const age: DemographicBucket<AgeRange>[] = AGE_ORDER
+    .filter((a) => (ageCounts.get(a) ?? 0) > 0)
+    .map((label) => {
+      const count = ageCounts.get(label) ?? 0;
+      return { label, count, pct: Math.round((count / total) * 100) };
+    });
+
+  const gender: DemographicBucket<Gender>[] = GENDER_ORDER
+    .filter((g) => (genderCounts.get(g) ?? 0) > 0)
+    .map((label) => {
+      const count = genderCounts.get(label) ?? 0;
+      return { label, count, pct: Math.round((count / total) * 100) };
+    });
+
+  const country: DemographicBucket<string>[] = Array.from(countryCounts.entries())
+    .map(([label, count]) => ({ label, count, pct: Math.round((count / total) * 100) }))
+    .sort((a, b) => b.count - a.count);
+
+  return { age, gender, country };
+}
+
 function volumeOverTime(comments: Comment[]): VolumePoint[] {
   const byDay = new Map<string, number>();
   for (const c of comments) {
@@ -230,6 +271,7 @@ export function deriveAnalysisOutput(
     audienceSignals: audienceSignals(comments),
     notableComments: notableComments(comments),
     volumeOverTime: volumeOverTime(comments),
+    demographics: aggregateDemographics(comments),
     totalComments: comments.length,
     lastRefreshedAt: "2026-05-22T15:00:00Z",
   };

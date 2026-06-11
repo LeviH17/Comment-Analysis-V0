@@ -4,6 +4,10 @@ export type IngestionPathway = "post" | "creator" | "search";
 
 export type Sentiment = "positive" | "neutral" | "negative" | "mixed";
 
+export type AgeRange = "13-17" | "18-24" | "25-34" | "35-44" | "45-54" | "55-64" | "65+";
+
+export type Gender = "male" | "female" | "non-binary" | "unknown";
+
 export type Creator = {
   id: string;
   name: string;
@@ -43,6 +47,21 @@ export type Comment = {
   sentiment: Sentiment;
   themes: string[];
   pathways: IngestionPathway[];
+  authorAge: AgeRange;
+  authorGender: Gender;
+  authorCountry: string;
+};
+
+export type DemographicBucket<T extends string = string> = {
+  label: T;
+  count: number;
+  pct: number;
+};
+
+export type Demographics = {
+  age: DemographicBucket<AgeRange>[];
+  gender: DemographicBucket<Gender>[];
+  country: DemographicBucket<string>[];
 };
 
 export type Folder = {
@@ -114,6 +133,7 @@ export type CommentAnalysisOutput = {
   audienceSignals: AudienceSignal[];
   notableComments: NotableComment[];
   volumeOverTime: VolumePoint[];
+  demographics: Demographics;
   totalComments: number;
   lastRefreshedAt: string;
 };
