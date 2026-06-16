@@ -6,13 +6,17 @@ import type {
   DemographicBucket,
   Demographics,
   Gender,
+  HeatmapCell,
   NotableComment,
+  Platform,
   Sentiment,
   Theme,
+  TopCommenter,
   VolumePoint,
 } from "@/lib/types";
 import { comments as allComments } from "@/lib/mock/comments";
 import { themeMeta } from "@/lib/mock/themesCatalog";
+import { getPost } from "@/lib/mock/posts";
 
 const SUMMARIES: Record<string, string> = {
   // post-level
@@ -246,6 +250,78 @@ function aggregateDemographics(comments: Comment[]): Demographics {
   return { age, gender, country };
 }
 
+function aggregateTopCommenters(comments: Comment[], limit = 5): TopCommenter[] {
+  type Acc = {
+    handle: string;
+    commentCount: number;
+    totalEngagement: number;
+    sentiments: Record<Sentiment, number>;
+    themes: Map<string, number>;
+    representativeBody: string;
+    representativeLikes: number;
+    platforms: Set<Platform>;
+  };
+  const byHandle = new Map<string, Acc>();
+
+  for (const c of comments) {
+    const post = getPost(c.postId);
+    let acc = byHandle.get(c.authorHandle);
+    if (!acc) {
+      acc = {
+        handle: c.authorHandle,
+        commentCount: 0,
+        totalEngagement: 0,
+        sentiments: { positive: 0, neutral: 0, negative: 0, mixed: 0 },
+        themes: new Map(),
+        representativeBody: c.body,
+        representativeLikes: -1,
+        platforms: new Set(),
+      };
+      byHandle.set(c.authorHandle, acc);
+    }
+    acc.commentCount += 1;
+    acc.totalEngagement += c.likes;
+    acc.sentiments[c.sentiment] += 1;
+    for (const t of c.themes) acc.themes.set(t, (acc.themes.get(t) ?? 0) + 1);
+    if (c.likes > acc.representativeLikes) {
+      acc.representativeBody = c.body;
+      acc.representativeLikes = c.likes;
+    }
+    if (post) acc.platforms.add(post.platform);
+  }
+
+  return Array.from(byHandle.values())
+    .map((acc) => {
+      const topThemeEntry = Array.from(acc.themes.entries()).sort((a, b) => b[1] - a[1])[0];
+      return {
+        handle: acc.handle,
+        commentCount: acc.commentCount,
+        totalEngagement: acc.totalEngagement,
+        dominantSentiment: dominantSentiment(acc.sentiments),
+        topTheme: topThemeEntry?.[0],
+        representativeComment: acc.representativeBody,
+        platforms: Array.from(acc.platforms),
+      };
+    })
+    .sort((a, b) => b.totalEngagement - a.totalEngagement)
+    .slice(0, limit);
+}
+
+function aggregateActivityHeatmap(comments: Comment[]): HeatmapCell[] {
+  const bucket = new Map<string, number>();
+  for (const c of comments) {
+    const d = new Date(c.postedAt);
+    const day = d.getUTCDay();
+    const hour = d.getUTCHours();
+    const key = `${day}-${hour}`;
+    bucket.set(key, (bucket.get(key) ?? 0) + 1);
+  }
+  return Array.from(bucket.entries()).map(([k, count]) => {
+    const [day, hour] = k.split("-").map(Number);
+    return { day, hour, count };
+  });
+}
+
 function volumeOverTime(comments: Comment[]): VolumePoint[] {
   const byDay = new Map<string, number>();
   for (const c of comments) {
@@ -272,6 +348,8 @@ export function deriveAnalysisOutput(
     notableComments: notableComments(comments),
     volumeOverTime: volumeOverTime(comments),
     demographics: aggregateDemographics(comments),
+    topCommenters: aggregateTopCommenters(comments),
+    activityHeatmap: aggregateActivityHeatmap(comments),
     totalComments: comments.length,
     lastRefreshedAt: "2026-05-22T15:00:00Z",
   };

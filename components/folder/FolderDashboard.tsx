@@ -7,6 +7,8 @@ import { ThemesWithFlyout } from "@/components/analysis/ThemesWithFlyout";
 import { NotableComments } from "@/components/analysis/NotableComments";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
+import { TopCommenters } from "@/components/analysis/TopCommenters";
+import { ActivityHeatmap } from "@/components/analysis/ActivityHeatmap";
 import { SeeAllCommentsButton } from "@/components/analysis/SeeAllCommentsButton";
 import { MetricCard } from "@/components/MetricCard";
 import { PostFilterBar } from "@/components/folder/PostFilterBar";
@@ -136,6 +138,11 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
           buckets={analysis.demographics.country}
           limit={5}
         />
+      </div>
+
+      <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
+        <TopCommenters commenters={analysis.topCommenters} />
+        <ActivityHeatmap cells={analysis.activityHeatmap} />
       </div>
 
       <NotableComments notable={analysis.notableComments} />

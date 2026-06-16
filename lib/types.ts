@@ -121,6 +121,24 @@ export type VolumePoint = {
   count: number;
 };
 
+export type TopCommenter = {
+  handle: string;
+  commentCount: number;
+  totalEngagement: number;
+  dominantSentiment: Sentiment;
+  topTheme?: string;
+  representativeComment: string;
+  platforms: Platform[];
+};
+
+export type HeatmapCell = {
+  /** 0 = Sunday, 6 = Saturday (UTC) */
+  day: number;
+  /** 0–23 (UTC) */
+  hour: number;
+  count: number;
+};
+
 export type CommentAnalysisOutput = {
   executiveSummary: string;
   sentiment: {
@@ -134,6 +152,8 @@ export type CommentAnalysisOutput = {
   notableComments: NotableComment[];
   volumeOverTime: VolumePoint[];
   demographics: Demographics;
+  topCommenters: TopCommenter[];
+  activityHeatmap: HeatmapCell[];
   totalComments: number;
   lastRefreshedAt: string;
 };
