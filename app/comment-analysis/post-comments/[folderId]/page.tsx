@@ -2,22 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, RefreshCw } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
-import { ExecutiveSummary } from "@/components/analysis/ExecutiveSummary";
-import { SentimentDonut } from "@/components/analysis/SentimentDonut";
-import { ThemeChips } from "@/components/analysis/ThemeChips";
-import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
-import { NotableComments } from "@/components/analysis/NotableComments";
-import { AudienceSignals } from "@/components/analysis/AudienceSignals";
-import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
-import { CommentFeed } from "@/components/analysis/CommentFeed";
-import { MetricCard } from "@/components/MetricCard";
-import { PostPreview } from "@/components/post/PostPreview";
+import { FolderDashboard } from "@/components/folder/FolderDashboard";
 import { getFolder } from "@/lib/mock/folders";
 import { getPost } from "@/lib/mock/posts";
-import { commentsForPosts } from "@/lib/mock/comments";
-import { deriveAnalysisOutput } from "@/lib/mock/analysisOutput";
-
-const fmt = new Intl.NumberFormat("en-US");
+import type { Post } from "@/lib/types";
 
 export default async function FolderDetailPage({
   params,
@@ -28,9 +16,9 @@ export default async function FolderDetailPage({
   const folder = getFolder(folderId);
   if (!folder) return notFound();
 
-  const posts = folder.postIds.map((id) => getPost(id)).filter((p) => p !== undefined);
-  const commentSet = commentsForPosts(folder.postIds);
-  const analysis = deriveAnalysisOutput(folder.id, commentSet, folder.name);
+  const posts = folder.postIds
+    .map((id) => getPost(id))
+    .filter((p): p is Post => p !== undefined);
 
   return (
     <PageShell
@@ -55,71 +43,7 @@ export default async function FolderDetailPage({
         </>
       }
     >
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
-        <div className="space-y-6">
-          <ExecutiveSummary text={analysis.executiveSummary} />
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="space-y-4">
-              <SentimentDonut sentiment={analysis.sentiment} total={analysis.totalComments} />
-              <DemographicsBars title="Commenter age" buckets={analysis.demographics.age} />
-              <DemographicsBars
-                title="Commenter gender"
-                buckets={analysis.demographics.gender}
-                formatLabel={capitalize}
-              />
-              <DemographicsBars
-                title="Commenter location"
-                buckets={analysis.demographics.country}
-                limit={5}
-              />
-            </div>
-            <ThemeChips themes={analysis.themes} />
-          </div>
-
-          <NotableComments notable={analysis.notableComments} />
-
-          <CommentFeed comments={commentSet} />
-        </div>
-
-        <div className="space-y-4">
-          <MetricCard
-            label="Comments analyzed"
-            value={fmt.format(analysis.totalComments)}
-            sparkline={<VolumeSparkline points={analysis.volumeOverTime} />}
-            hint="Aggregate across all posts in this folder"
-          />
-          <MetricCard
-            label="Posts in folder"
-            value={posts.length}
-            hint="URL-added or bookmarked posts"
-          />
-
-          <AudienceSignals signals={analysis.audienceSignals} />
-
-          <section className="rounded-xl border border-zinc-200 bg-white p-4">
-            <div className="flex items-center justify-between">
-              <div className="text-sm font-medium text-zinc-900">Posts in folder</div>
-              <span className="text-[11px] text-zinc-500">{posts.length}</span>
-            </div>
-            <ul className="mt-3 space-y-2.5">
-              {posts.map((p) => (
-                <li key={p.id}>
-                  <PostPreview
-                    post={p}
-                    href={`/comment-analysis/post-comments/${folder.id}/post/${p.id}`}
-                  />
-                </li>
-              ))}
-              {posts.length === 0 && (
-                <li className="rounded-lg border border-dashed border-zinc-200 px-3 py-6 text-center text-xs text-zinc-500">
-                  No posts in this folder yet.
-                </li>
-              )}
-            </ul>
-          </section>
-        </div>
-      </div>
+      <FolderDashboard folder={folder} posts={posts} />
     </PageShell>
   );
 }
