@@ -10,11 +10,12 @@ import { NotableComments } from "@/components/analysis/NotableComments";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { SeeAllCommentsButton } from "@/components/analysis/SeeAllCommentsButton";
 import { MetricCard } from "@/components/MetricCard";
-import { PostCard } from "@/components/post/PostCard";
+import { PostPreview } from "@/components/post/PostPreview";
 import { getAnalysisRun } from "@/lib/mock/runs";
 import { commentsForPosts } from "@/lib/mock/comments";
 import { getPost } from "@/lib/mock/posts";
 import { deriveAnalysisOutput } from "@/lib/mock/analysisOutput";
+import type { Sentiment } from "@/lib/types";
 
 const TIME_WINDOW_LABEL: Record<string, string> = {
   "24h": "Last 24 hours",
@@ -24,6 +25,13 @@ const TIME_WINDOW_LABEL: Record<string, string> = {
 };
 
 const fmt = new Intl.NumberFormat("en-US");
+
+const SENTIMENT_DOT: Record<Sentiment, string> = {
+  positive: "bg-emerald-500",
+  neutral: "bg-zinc-400",
+  negative: "bg-red-500",
+  mixed: "bg-amber-500",
+};
 
 export default async function AnalysisRunDetailPage({
   params,
@@ -45,6 +53,10 @@ export default async function AnalysisRunDetailPage({
     hour: "2-digit",
     minute: "2-digit",
   });
+
+  const topSentimentEntries = Object.entries(analysis.sentiment) as Array<[Sentiment, number]>;
+  const topSentiment = [...topSentimentEntries].sort((a, b) => b[1] - a[1])[0];
+  const topRegion = analysis.demographics.country[0];
 
   return (
     <PageShell
@@ -69,39 +81,14 @@ export default async function AnalysisRunDetailPage({
         </>
       }
     >
-      <RunMeta run={run} lastRefresh={lastRefresh} />
+      <div className="space-y-6">
+        <RunMeta run={run} lastRefresh={lastRefresh} />
 
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
-        <div className="space-y-6">
-          <ExecutiveSummary text={analysis.executiveSummary} />
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="space-y-4">
-              <SentimentDonut sentiment={analysis.sentiment} total={analysis.totalComments} />
-              <DemographicsBars title="Commenter age" buckets={analysis.demographics.age} />
-              <DemographicsBars
-                title="Commenter gender"
-                buckets={analysis.demographics.gender}
-                formatLabel={capitalize}
-              />
-              <DemographicsBars
-                title="Commenter location"
-                buckets={analysis.demographics.country}
-                limit={5}
-              />
-            </div>
-            <ThemeChips themes={analysis.themes} />
-          </div>
-
-          <NotableComments notable={analysis.notableComments} />
-        </div>
-
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard
-            label="Comment volume"
+            label="Comments"
             value={fmt.format(analysis.totalComments)}
             sparkline={<VolumeSparkline points={analysis.volumeOverTime} />}
-            hint="Comments ingested across the current top-X"
             footer={
               <SeeAllCommentsButton
                 title={run.name}
@@ -117,30 +104,88 @@ export default async function AnalysisRunDetailPage({
             hint="Top posts by engagement currently in the analysis window"
           />
           <MetricCard
-            label="Last refresh"
-            value={lastRefresh}
-            hint="Refreshes every 24 hours"
+            label="Top sentiment"
+            value={
+              <span className="inline-flex items-baseline gap-2">
+                <span
+                  className={`inline-block h-2.5 w-2.5 translate-y-[-2px] rounded-full ${SENTIMENT_DOT[topSentiment[0]]}`}
+                />
+                <span>{capitalize(topSentiment[0])}</span>
+                <span className="text-base font-normal text-zinc-500">{topSentiment[1]}%</span>
+              </span>
+            }
           />
-
-          <section className="rounded-xl border border-zinc-200 bg-white p-4">
-            <div className="flex items-center justify-between">
-              <div className="text-sm font-medium text-zinc-900">Top-X posts</div>
-              <span className="text-[11px] text-zinc-500">{currentPosts.length} active</span>
-            </div>
-            <ul className="mt-3 space-y-2.5">
-              {currentPosts.map((p) => (
-                <li key={p.id}>
-                  <PostCard post={p} trailing={<span className="rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700">New</span>} />
-                </li>
-              ))}
-              {droppedPosts.map((p) => (
-                <li key={p.id}>
-                  <PostCard post={p} trailing={<span className="rounded-full bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500">Dropped</span>} />
-                </li>
-              ))}
-            </ul>
-          </section>
+          <MetricCard
+            label="Top location"
+            value={
+              topRegion ? (
+                <span className="inline-flex items-baseline gap-2">
+                  <span className="truncate">{topRegion.label}</span>
+                  <span className="text-base font-normal text-zinc-500">{topRegion.pct}%</span>
+                </span>
+              ) : (
+                "—"
+              )
+            }
+          />
         </div>
+
+        <ExecutiveSummary text={analysis.executiveSummary} />
+
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <SentimentDonut sentiment={analysis.sentiment} total={analysis.totalComments} />
+          <ThemeChips themes={analysis.themes} />
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <DemographicsBars title="Commenter age" buckets={analysis.demographics.age} />
+          <DemographicsBars
+            title="Commenter gender"
+            buckets={analysis.demographics.gender}
+            formatLabel={capitalize}
+          />
+          <DemographicsBars
+            title="Commenter location"
+            buckets={analysis.demographics.country}
+            limit={5}
+          />
+        </div>
+
+        <NotableComments notable={analysis.notableComments} />
+
+        <section className="rounded-xl border border-zinc-200 bg-white p-5">
+          <div className="mb-4 flex items-baseline justify-between">
+            <div className="text-sm font-medium text-zinc-900">Top-X posts</div>
+            <span className="text-[11px] text-zinc-500">
+              {currentPosts.length} active
+              {droppedPosts.length > 0 ? ` · ${droppedPosts.length} dropped` : ""}
+            </span>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {currentPosts.map((p) => (
+              <PostPreview
+                key={p.id}
+                post={p}
+                trailing={
+                  <span className="rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700">
+                    New
+                  </span>
+                }
+              />
+            ))}
+            {droppedPosts.map((p) => (
+              <PostPreview
+                key={p.id}
+                post={p}
+                trailing={
+                  <span className="rounded-full bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500">
+                    Dropped
+                  </span>
+                }
+              />
+            ))}
+          </div>
+        </section>
       </div>
     </PageShell>
   );
