@@ -8,7 +8,7 @@ import { ThemeChips } from "@/components/analysis/ThemeChips";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { NotableComments } from "@/components/analysis/NotableComments";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
-import { CommentsSection } from "@/components/analysis/CommentsSection";
+import { SeeAllCommentsButton } from "@/components/analysis/SeeAllCommentsButton";
 import { MetricCard } from "@/components/MetricCard";
 import { PostCard } from "@/components/post/PostCard";
 import { getFolder } from "@/lib/mock/folders";
@@ -84,13 +84,6 @@ export default async function PostDetailPage({
           </div>
 
           <NotableComments notable={analysis.notableComments} />
-
-          <CommentsSection
-            title={post.title ?? `Post by ${post.creatorId}`}
-            subtitle={`${folder.name} · Per-post comment analysis`}
-            comments={commentSet}
-            analysis={analysis}
-          />
         </div>
 
         <div className="space-y-4">
@@ -99,6 +92,14 @@ export default async function PostDetailPage({
             value={fmt.format(analysis.totalComments)}
             sparkline={<VolumeSparkline points={analysis.volumeOverTime} />}
             hint="Comments ingested for this post"
+            footer={
+              <SeeAllCommentsButton
+                title={post.title ?? "Post comment analysis"}
+                subtitle={`${folder.name} · Per-post comment analysis`}
+                comments={commentSet}
+                analysis={analysis}
+              />
+            }
           />
           <MetricCard
             label="Post engagement"

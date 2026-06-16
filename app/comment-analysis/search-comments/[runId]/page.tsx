@@ -8,7 +8,7 @@ import { ThemeChips } from "@/components/analysis/ThemeChips";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { NotableComments } from "@/components/analysis/NotableComments";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
-import { CommentsSection } from "@/components/analysis/CommentsSection";
+import { SeeAllCommentsButton } from "@/components/analysis/SeeAllCommentsButton";
 import { MetricCard } from "@/components/MetricCard";
 import { PostCard } from "@/components/post/PostCard";
 import { getAnalysisRun } from "@/lib/mock/runs";
@@ -94,13 +94,6 @@ export default async function AnalysisRunDetailPage({
           </div>
 
           <NotableComments notable={analysis.notableComments} />
-
-          <CommentsSection
-            title={run.name}
-            subtitle={run.query}
-            comments={commentSet}
-            analysis={analysis}
-          />
         </div>
 
         <div className="space-y-4">
@@ -109,6 +102,14 @@ export default async function AnalysisRunDetailPage({
             value={fmt.format(analysis.totalComments)}
             sparkline={<VolumeSparkline points={analysis.volumeOverTime} />}
             hint="Comments ingested across the current top-X"
+            footer={
+              <SeeAllCommentsButton
+                title={run.name}
+                subtitle={run.query}
+                comments={commentSet}
+                analysis={analysis}
+              />
+            }
           />
           <MetricCard
             label="Posts in top-X"

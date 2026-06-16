@@ -6,7 +6,7 @@ import { SentimentDonut } from "@/components/analysis/SentimentDonut";
 import { ThemeChips } from "@/components/analysis/ThemeChips";
 import { NotableComments } from "@/components/analysis/NotableComments";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
-import { CommentsSection } from "@/components/analysis/CommentsSection";
+import { SeeAllCommentsButton } from "@/components/analysis/SeeAllCommentsButton";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { MetricCard } from "@/components/MetricCard";
 import { PostFilterBar } from "@/components/folder/PostFilterBar";
@@ -72,13 +72,6 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
           </div>
 
           <NotableComments notable={analysis.notableComments} />
-
-          <CommentsSection
-            title={folder.name}
-            subtitle={folder.description}
-            comments={commentSet}
-            analysis={analysis}
-          />
         </div>
 
         <div className="space-y-4">
@@ -90,6 +83,20 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
               filterActive
                 ? "Aggregate across the filtered subset"
                 : "Aggregate across all posts in this folder"
+            }
+            footer={
+              <SeeAllCommentsButton
+                title={folder.name}
+                subtitle={
+                  filterActive
+                    ? `${folder.description ?? ""}${
+                        folder.description ? " · " : ""
+                      }Filtered to ${filteredPostIds.length} of ${folder.postIds.length} posts`
+                    : folder.description
+                }
+                comments={commentSet}
+                analysis={analysis}
+              />
             }
           />
           <MetricCard

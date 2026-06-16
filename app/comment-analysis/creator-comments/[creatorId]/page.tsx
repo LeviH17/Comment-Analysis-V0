@@ -9,7 +9,7 @@ import { ThemeChips } from "@/components/analysis/ThemeChips";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { NotableComments } from "@/components/analysis/NotableComments";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
-import { CommentsSection } from "@/components/analysis/CommentsSection";
+import { SeeAllCommentsButton } from "@/components/analysis/SeeAllCommentsButton";
 import { MetricCard } from "@/components/MetricCard";
 import { PostCard } from "@/components/post/PostCard";
 import { getCreator } from "@/lib/mock/creators";
@@ -93,13 +93,6 @@ export default async function CreatorDetailPage({
           </div>
 
           <NotableComments notable={analysis.notableComments} />
-
-          <CommentsSection
-            title={creator.name}
-            subtitle={`${creator.handle} · Creator comment analysis`}
-            comments={commentSet}
-            analysis={analysis}
-          />
         </div>
 
         <div className="space-y-4">
@@ -108,6 +101,14 @@ export default async function CreatorDetailPage({
             value={fmt.format(analysis.totalComments)}
             sparkline={<VolumeSparkline points={analysis.volumeOverTime} />}
             hint="Across all tracked posts by this creator"
+            footer={
+              <SeeAllCommentsButton
+                title={creator.name}
+                subtitle={`${creator.handle} · Creator comment analysis`}
+                comments={commentSet}
+                analysis={analysis}
+              />
+            }
           />
           <MetricCard
             label="Posts tracked"

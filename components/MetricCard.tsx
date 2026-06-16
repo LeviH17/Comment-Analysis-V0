@@ -7,12 +7,14 @@ export function MetricCard({
   sparkline,
   hint,
   trailing,
+  footer,
 }: {
   label: string;
   value: ReactNode;
   sparkline?: ReactNode;
   hint?: string;
   trailing?: ReactNode;
+  footer?: ReactNode;
 }) {
   return (
     <div className="rounded-xl border border-zinc-200 bg-white p-4">
@@ -27,6 +29,9 @@ export function MetricCard({
         <div className="text-2xl font-semibold tracking-tight text-zinc-900">{value}</div>
         {sparkline}
       </div>
+      {footer && (
+        <div className="mt-3 border-t border-zinc-100 pt-3">{footer}</div>
+      )}
     </div>
   );
 }
