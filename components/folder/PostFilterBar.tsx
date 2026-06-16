@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Filter, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Filter, X } from "lucide-react";
 import type { Post } from "@/lib/types";
 import { getCreator } from "@/lib/mock/creators";
 import { PlatformBadge } from "@/components/PlatformBadge";
+import { SelectablePostPreview } from "@/components/folder/SelectablePostPreview";
 
 export function PostFilterBar({
   posts,
@@ -15,7 +16,7 @@ export function PostFilterBar({
   selectedIds: Set<string>;
   onChange: (next: Set<string>) => void;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const total = posts.length;
   const selectedCount = selectedIds.size;
   const filterActive = selectedCount > 0 && selectedCount < total;
@@ -48,13 +49,19 @@ export function PostFilterBar({
               ? "border-zinc-900 bg-zinc-900 text-white hover:bg-black"
               : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"
           }`}
+          aria-expanded={open}
         >
           <Filter className="h-3.5 w-3.5" />
-          Filter posts
-          {filterActive && (
-            <span className="ml-1 inline-flex h-5 items-center rounded-full bg-white/15 px-1.5 text-[10px] font-medium tabular-nums">
-              {selectedCount}
+          <span>
+            Posts{" "}
+            <span className="tabular-nums opacity-80">
+              ({filterActive ? `${selectedCount} of ${total}` : total})
             </span>
+          </span>
+          {open ? (
+            <ChevronUp className="h-3.5 w-3.5 opacity-70" />
+          ) : (
+            <ChevronDown className="h-3.5 w-3.5 opacity-70" />
           )}
         </button>
 
@@ -85,7 +92,7 @@ export function PostFilterBar({
         )}
       </div>
 
-      {filterActive && (
+      {!open && filterActive && (
         <div className="mt-2 flex flex-wrap gap-1.5">
           {selectedPosts.map((p) => {
             const creator = getCreator(p.creatorId);
@@ -116,61 +123,43 @@ export function PostFilterBar({
       )}
 
       {open && (
-        <div className="mt-3 overflow-hidden rounded-md border border-zinc-200 bg-white">
-          <button
-            type="button"
-            onClick={toggleAll}
-            className="flex w-full items-center gap-2 border-b border-zinc-100 px-3 py-1.5 text-left text-[12px] text-zinc-600 hover:bg-zinc-50"
-          >
-            <input
-              type="checkbox"
-              readOnly
-              checked={allSelected}
-              className="h-3 w-3 rounded accent-zinc-900"
-            />
-            <span>{allSelected ? "Deselect all" : "Select all"}</span>
-            <span className="ml-auto text-[11px] text-zinc-400 tabular-nums">
-              {selectedCount}/{total}
+        <div className="mt-3 border-t border-zinc-100 pt-3">
+          <div className="mb-2.5 flex items-center justify-between">
+            <button
+              type="button"
+              onClick={toggleAll}
+              className="inline-flex items-center gap-2 rounded-md px-1.5 py-1 text-[12px] text-zinc-600 hover:bg-zinc-50"
+            >
+              <input
+                type="checkbox"
+                readOnly
+                checked={allSelected}
+                className="h-3 w-3 rounded accent-zinc-900"
+              />
+              <span>{allSelected ? "Deselect all" : "Select all"}</span>
+              <span className="text-[11px] text-zinc-400 tabular-nums">
+                {selectedCount}/{total}
+              </span>
+            </button>
+            <span className="text-[11px] text-zinc-400">
+              Click a post to {filterActive ? "toggle" : "filter the analysis"}
             </span>
-          </button>
-          <ul className="max-h-72 overflow-y-auto py-1">
-            {posts.map((p) => {
-              const creator = getCreator(p.creatorId);
-              const checked = selectedIds.has(p.id);
-              const dt = new Date(p.publishedAt).toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
-              });
-              const label = p.title ?? p.body.slice(0, 100);
-              return (
-                <li key={p.id}>
-                  <label
-                    className={`flex cursor-pointer items-start gap-2 px-3 py-1.5 hover:bg-zinc-50 ${
-                      checked ? "bg-zinc-50" : ""
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={() => togglePost(p.id)}
-                      className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 rounded accent-zinc-900"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-1.5">
-                        <PlatformBadge platform={p.platform} size="xs" />
-                        <span className="truncate text-[12px] font-medium text-zinc-900">
-                          {label}
-                        </span>
-                      </div>
-                      <div className="mt-0.5 truncate text-[11px] text-zinc-500">
-                        {creator?.name ?? "Unknown"} · {dt}
-                      </div>
-                    </div>
-                  </label>
-                </li>
-              );
-            })}
-          </ul>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {posts.map((p) => (
+              <SelectablePostPreview
+                key={p.id}
+                post={p}
+                selected={selectedIds.has(p.id)}
+                onToggle={() => togglePost(p.id)}
+              />
+            ))}
+            {posts.length === 0 && (
+              <div className="col-span-full rounded-lg border border-dashed border-zinc-200 px-3 py-6 text-center text-xs text-zinc-500">
+                No posts in this folder yet.
+              </div>
+            )}
+          </div>
         </div>
       )}
     </section>

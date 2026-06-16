@@ -10,7 +10,6 @@ import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { CommentFeed } from "@/components/analysis/CommentFeed";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { MetricCard } from "@/components/MetricCard";
-import { PostPreview } from "@/components/post/PostPreview";
 import { PostFilterBar } from "@/components/folder/PostFilterBar";
 import { commentsForPosts } from "@/lib/mock/comments";
 import { deriveAnalysisOutput } from "@/lib/mock/analysisOutput";
@@ -100,48 +99,6 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
           />
 
           <AudienceSignals signals={analysis.audienceSignals} />
-
-          <section className="rounded-xl border border-zinc-200 bg-white p-4">
-            <div className="flex items-center justify-between">
-              <div className="text-sm font-medium text-zinc-900">Posts in folder</div>
-              <span className="text-[11px] text-zinc-500">
-                {filterActive ? (
-                  <>
-                    <span className="text-zinc-900 tabular-nums">{filteredPostIds.length}</span> /{" "}
-                    {posts.length} in analysis
-                  </>
-                ) : (
-                  posts.length
-                )}
-              </span>
-            </div>
-            <ul className="mt-3 space-y-2.5">
-              {posts.map((p) => {
-                const inFilter =
-                  !filterActive || selectedPostIds.has(p.id);
-                return (
-                  <li key={p.id} className={inFilter ? "" : "opacity-40"}>
-                    <PostPreview
-                      post={p}
-                      href={`/comment-analysis/post-comments/${folder.id}/post/${p.id}`}
-                      trailing={
-                        filterActive && selectedPostIds.has(p.id) ? (
-                          <span className="rounded-full bg-zinc-900 px-1.5 py-0.5 text-[10px] font-medium text-white">
-                            In filter
-                          </span>
-                        ) : undefined
-                      }
-                    />
-                  </li>
-                );
-              })}
-              {posts.length === 0 && (
-                <li className="rounded-lg border border-dashed border-zinc-200 px-3 py-6 text-center text-xs text-zinc-500">
-                  No posts in this folder yet.
-                </li>
-              )}
-            </ul>
-          </section>
         </div>
       </div>
     </div>
