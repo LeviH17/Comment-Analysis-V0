@@ -8,7 +8,6 @@ import { SentimentDonut } from "@/components/analysis/SentimentDonut";
 import { ThemeChips } from "@/components/analysis/ThemeChips";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { NotableComments } from "@/components/analysis/NotableComments";
-import { AudienceSignals } from "@/components/analysis/AudienceSignals";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { CommentFeed } from "@/components/analysis/CommentFeed";
 import { MetricCard } from "@/components/MetricCard";
@@ -115,8 +114,6 @@ export default async function CreatorDetailPage({
             value={fmt.format(creator.followers)}
             hint="Platform-native follower count"
           />
-
-          <AudienceSignals signals={analysis.audienceSignals} />
 
           <section className="rounded-xl border border-zinc-200 bg-white p-4">
             <div className="flex items-center justify-between">

@@ -5,7 +5,6 @@ import { ExecutiveSummary } from "@/components/analysis/ExecutiveSummary";
 import { SentimentDonut } from "@/components/analysis/SentimentDonut";
 import { ThemeChips } from "@/components/analysis/ThemeChips";
 import { NotableComments } from "@/components/analysis/NotableComments";
-import { AudienceSignals } from "@/components/analysis/AudienceSignals";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { CommentFeed } from "@/components/analysis/CommentFeed";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
@@ -98,7 +97,6 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
             hint="URL-added or bookmarked posts"
           />
 
-          <AudienceSignals signals={analysis.audienceSignals} />
         </div>
       </div>
     </div>

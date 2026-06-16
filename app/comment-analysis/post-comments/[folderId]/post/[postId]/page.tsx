@@ -7,7 +7,6 @@ import { SentimentDonut } from "@/components/analysis/SentimentDonut";
 import { ThemeChips } from "@/components/analysis/ThemeChips";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { NotableComments } from "@/components/analysis/NotableComments";
-import { AudienceSignals } from "@/components/analysis/AudienceSignals";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { CommentFeed } from "@/components/analysis/CommentFeed";
 import { MetricCard } from "@/components/MetricCard";
@@ -108,8 +107,6 @@ export default async function PostDetailPage({
               hint="Platform-native view count"
             />
           )}
-
-          <AudienceSignals signals={analysis.audienceSignals} />
         </div>
       </div>
     </PageShell>
