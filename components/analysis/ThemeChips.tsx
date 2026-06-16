@@ -1,5 +1,7 @@
+"use client";
+
 import type { Sentiment, Theme, ThemeCategory, ThemeEmergence } from "@/lib/types";
-import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, ChevronRight } from "lucide-react";
 
 const fmt = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
 
@@ -42,12 +44,17 @@ function emergenceLabel(value: ThemeEmergence): string {
 export function ThemeChips({
   themes,
   showCount = 8,
+  onThemeClick,
+  activeLabel,
 }: {
   themes: Theme[];
   showCount?: number;
+  onThemeClick?: (label: string) => void;
+  activeLabel?: string | null;
 }) {
   const total = themes.length;
   const shown = themes.slice(0, showCount);
+  const clickable = !!onThemeClick;
 
   if (total === 0) {
     return (
@@ -68,11 +75,13 @@ export function ThemeChips({
           <span className="text-[11px] text-zinc-400">Top {showCount} by engagement</span>
         )}
       </div>
-      <ul className="mt-3 divide-y divide-zinc-100">
+      <ul className="mt-1 divide-y divide-zinc-100">
         {shown.map((t) => {
           const cat = CATEGORY_STYLE[t.category];
-          return (
-            <li key={t.label} className="py-2.5 first:pt-0 last:pb-0" title={t.sample}>
+          const isActive = activeLabel === t.label;
+
+          const rowBody = (
+            <>
               <div className="flex items-center gap-2 text-[10px] uppercase tracking-wide text-zinc-500">
                 <span className={`rounded px-1.5 py-0.5 font-medium ${cat.bg} ${cat.fg}`}>
                   {t.category}
@@ -83,6 +92,9 @@ export function ThemeChips({
                     {emergenceLabel(t.emergence)}
                   </span>
                 </span>
+                {clickable && (
+                  <ChevronRight className="ml-auto h-3 w-3 text-zinc-300 transition-transform group-hover:translate-x-0.5 group-hover:text-zinc-500" />
+                )}
               </div>
               <div className="mt-1 text-[13px] font-medium leading-snug text-zinc-900">
                 {t.label}
@@ -105,6 +117,27 @@ export function ThemeChips({
                   engagement
                 </span>
               </div>
+            </>
+          );
+
+          const baseClasses = `block w-full text-left py-2.5 px-2 -mx-2 rounded-md transition-colors ${
+            isActive ? "bg-zinc-100 ring-1 ring-inset ring-zinc-900/10" : ""
+          }`;
+
+          return (
+            <li key={t.label} title={t.sample}>
+              {clickable ? (
+                <button
+                  type="button"
+                  onClick={() => onThemeClick(t.label)}
+                  className={`group ${baseClasses} hover:bg-zinc-50 ${isActive ? "hover:bg-zinc-100" : ""}`}
+                  aria-pressed={isActive}
+                >
+                  {rowBody}
+                </button>
+              ) : (
+                <div className={baseClasses}>{rowBody}</div>
+              )}
             </li>
           );
         })}

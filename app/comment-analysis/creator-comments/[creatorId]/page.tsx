@@ -5,7 +5,7 @@ import { PageShell } from "@/components/PageShell";
 import { PlatformBadge, platformName } from "@/components/PlatformBadge";
 import { ExecutiveSummary } from "@/components/analysis/ExecutiveSummary";
 import { SentimentDonut } from "@/components/analysis/SentimentDonut";
-import { ThemeChips } from "@/components/analysis/ThemeChips";
+import { ThemesWithFlyout } from "@/components/analysis/ThemesWithFlyout";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { NotableComments } from "@/components/analysis/NotableComments";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
@@ -133,7 +133,11 @@ export default async function CreatorDetailPage({
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <SentimentDonut sentiment={analysis.sentiment} total={analysis.totalComments} />
-          <ThemeChips themes={analysis.themes} />
+          <ThemesWithFlyout
+            themes={analysis.themes}
+            allComments={commentSet}
+            flyoutSubtitle={`Theme view · ${creator.name}`}
+          />
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">

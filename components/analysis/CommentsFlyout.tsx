@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Filter, X } from "lucide-react";
 import type { Comment, CommentAnalysisOutput } from "@/lib/types";
 import { CommentFeed } from "@/components/analysis/CommentFeed";
 import { ExecutiveSummary } from "@/components/analysis/ExecutiveSummary";
@@ -22,8 +22,13 @@ export function CommentsFlyout({
   comments: Comment[];
   analysis: CommentAnalysisOutput;
 }) {
+  const [themeFilter, setThemeFilter] = useState<string | null>(null);
+
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      setThemeFilter(null);
+      return;
+    }
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
@@ -35,6 +40,11 @@ export function CommentsFlyout({
       document.body.style.overflow = prevOverflow;
     };
   }, [open, onClose]);
+
+  const filteredComments = useMemo(() => {
+    if (!themeFilter) return comments;
+    return comments.filter((c) => c.themes.includes(themeFilter));
+  }, [comments, themeFilter]);
 
   if (!open) return null;
 
@@ -71,14 +81,47 @@ export function CommentsFlyout({
         </header>
 
         <div className="flex flex-1 overflow-hidden">
-          <aside className="hidden w-[320px] flex-shrink-0 overflow-y-auto border-r border-zinc-100 bg-zinc-50/40 px-5 py-5 md:block">
+          <aside className="hidden w-[340px] flex-shrink-0 overflow-y-auto border-r border-zinc-100 bg-zinc-50/40 px-5 py-5 md:block">
             <div className="space-y-5">
               <ExecutiveSummary text={analysis.executiveSummary} />
-              <ThemeChips themes={analysis.themes} showCount={6} />
+              <ThemeChips
+                themes={analysis.themes}
+                showCount={8}
+                onThemeClick={(label) =>
+                  setThemeFilter((current) => (current === label ? null : label))
+                }
+                activeLabel={themeFilter}
+              />
+              {analysis.themes.length > 0 && (
+                <p className="text-[11px] leading-4 text-zinc-400">
+                  Click a theme to filter the comments feed to only comments tagged
+                  with it.
+                </p>
+              )}
             </div>
           </aside>
-          <main className="flex-1 overflow-y-auto bg-zinc-50/30 px-5 py-5">
-            <CommentFeed comments={comments} />
+          <main className="flex flex-1 flex-col overflow-y-auto bg-zinc-50/30 px-5 py-5">
+            {themeFilter && (
+              <div className="mb-3 flex flex-wrap items-center gap-2 rounded-md border border-zinc-900 bg-zinc-900 px-3 py-2 text-xs text-white">
+                <Filter className="h-3 w-3 flex-shrink-0" />
+                <span className="min-w-0 truncate">
+                  Filtered to theme:{" "}
+                  <span className="font-medium">{themeFilter}</span>
+                </span>
+                <span className="ml-auto inline-flex items-center gap-2 tabular-nums opacity-80">
+                  {filteredComments.length} of {comments.length} comments
+                  <button
+                    type="button"
+                    onClick={() => setThemeFilter(null)}
+                    aria-label="Clear theme filter"
+                    className="rounded-full p-0.5 transition-colors hover:bg-white/20"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </span>
+              </div>
+            )}
+            <CommentFeed comments={filteredComments} />
           </main>
         </div>
 

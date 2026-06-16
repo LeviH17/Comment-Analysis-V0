@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { ExecutiveSummary } from "@/components/analysis/ExecutiveSummary";
 import { SentimentDonut } from "@/components/analysis/SentimentDonut";
-import { ThemeChips } from "@/components/analysis/ThemeChips";
+import { ThemesWithFlyout } from "@/components/analysis/ThemesWithFlyout";
 import { NotableComments } from "@/components/analysis/NotableComments";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
@@ -117,7 +117,11 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <SentimentDonut sentiment={analysis.sentiment} total={analysis.totalComments} />
-        <ThemeChips themes={analysis.themes} />
+        <ThemesWithFlyout
+          themes={analysis.themes}
+          allComments={commentSet}
+          flyoutSubtitle={`Theme view · ${folder.name}`}
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
