@@ -6,7 +6,7 @@ import { SentimentDonut } from "@/components/analysis/SentimentDonut";
 import { ThemeChips } from "@/components/analysis/ThemeChips";
 import { NotableComments } from "@/components/analysis/NotableComments";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
-import { CommentFeed } from "@/components/analysis/CommentFeed";
+import { CommentsSection } from "@/components/analysis/CommentsSection";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { MetricCard } from "@/components/MetricCard";
 import { PostFilterBar } from "@/components/folder/PostFilterBar";
@@ -73,7 +73,12 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
 
           <NotableComments notable={analysis.notableComments} />
 
-          <CommentFeed comments={commentSet} />
+          <CommentsSection
+            title={folder.name}
+            subtitle={folder.description}
+            comments={commentSet}
+            analysis={analysis}
+          />
         </div>
 
         <div className="space-y-4">

@@ -8,7 +8,7 @@ import { ThemeChips } from "@/components/analysis/ThemeChips";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { NotableComments } from "@/components/analysis/NotableComments";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
-import { CommentFeed } from "@/components/analysis/CommentFeed";
+import { CommentsSection } from "@/components/analysis/CommentsSection";
 import { MetricCard } from "@/components/MetricCard";
 import { PostCard } from "@/components/post/PostCard";
 import { getAnalysisRun } from "@/lib/mock/runs";
@@ -95,7 +95,12 @@ export default async function AnalysisRunDetailPage({
 
           <NotableComments notable={analysis.notableComments} />
 
-          <CommentFeed comments={commentSet} />
+          <CommentsSection
+            title={run.name}
+            subtitle={run.query}
+            comments={commentSet}
+            analysis={analysis}
+          />
         </div>
 
         <div className="space-y-4">

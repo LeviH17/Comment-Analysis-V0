@@ -9,7 +9,7 @@ import { ThemeChips } from "@/components/analysis/ThemeChips";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { NotableComments } from "@/components/analysis/NotableComments";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
-import { CommentFeed } from "@/components/analysis/CommentFeed";
+import { CommentsSection } from "@/components/analysis/CommentsSection";
 import { MetricCard } from "@/components/MetricCard";
 import { PostCard } from "@/components/post/PostCard";
 import { getCreator } from "@/lib/mock/creators";
@@ -94,7 +94,12 @@ export default async function CreatorDetailPage({
 
           <NotableComments notable={analysis.notableComments} />
 
-          <CommentFeed comments={commentSet} />
+          <CommentsSection
+            title={creator.name}
+            subtitle={`${creator.handle} · Creator comment analysis`}
+            comments={commentSet}
+            analysis={analysis}
+          />
         </div>
 
         <div className="space-y-4">

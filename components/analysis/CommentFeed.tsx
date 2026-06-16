@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import type { Comment, Sentiment } from "@/lib/types";
 import { getPost } from "@/lib/mock/posts";
 import { PlatformBadge } from "@/components/PlatformBadge";
-import { Heart, MessageSquare, Search, ArrowUpDown, Filter } from "lucide-react";
+import { Heart, MessageSquare, Search, ArrowUpDown, Filter, ArrowRight } from "lucide-react";
 
 const fmt = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
 
@@ -24,7 +24,17 @@ const SENTIMENT_LABEL: Record<Sentiment, string> = {
 
 type Sort = "engagement" | "recent";
 
-export function CommentFeed({ comments }: { comments: Comment[] }) {
+export function CommentFeed({
+  comments,
+  preview = false,
+  previewLimit = 5,
+  onShowAll,
+}: {
+  comments: Comment[];
+  preview?: boolean;
+  previewLimit?: number;
+  onShowAll?: () => void;
+}) {
   const [sentiment, setSentiment] = useState<"all" | Sentiment>("all");
   const [theme, setTheme] = useState<"all" | string>("all");
   const [query, setQuery] = useState("");
@@ -37,6 +47,9 @@ export function CommentFeed({ comments }: { comments: Comment[] }) {
   }, [comments]);
 
   const filtered = useMemo(() => {
+    if (preview) {
+      return [...comments].sort((a, b) => b.likes - a.likes).slice(0, previewLimit);
+    }
     let arr = comments.slice();
     if (sentiment !== "all") arr = arr.filter((c) => c.sentiment === sentiment);
     if (theme !== "all") arr = arr.filter((c) => c.themes.includes(theme));
@@ -47,50 +60,65 @@ export function CommentFeed({ comments }: { comments: Comment[] }) {
     if (sort === "engagement") arr.sort((a, b) => b.likes - a.likes);
     else arr.sort((a, b) => b.postedAt.localeCompare(a.postedAt));
     return arr;
-  }, [comments, sentiment, theme, query, sort]);
+  }, [comments, preview, previewLimit, sentiment, theme, query, sort]);
 
   return (
     <section className="rounded-xl border border-zinc-200 bg-white">
       <header className="flex flex-wrap items-center gap-2 border-b border-zinc-100 px-4 py-3">
         <div className="text-sm font-medium text-zinc-900">
-          Comments <span className="text-zinc-500">({filtered.length})</span>
+          Comments <span className="text-zinc-500">({comments.length})</span>
         </div>
         <div className="ml-auto flex flex-wrap items-center gap-2">
-          <div className="relative">
-            <Search className="absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-400" />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search comments"
-              className="h-8 w-44 rounded-md border border-zinc-200 bg-white pl-7 pr-2 text-xs placeholder-zinc-400 focus:border-zinc-400 focus:outline-none"
-            />
-          </div>
-          <SelectChip
-            icon={<Filter className="h-3 w-3" />}
-            value={sentiment}
-            onChange={(v) => setSentiment(v as typeof sentiment)}
-            options={[
-              { value: "all", label: "All sentiment" },
-              { value: "positive", label: "Positive" },
-              { value: "neutral", label: "Neutral" },
-              { value: "negative", label: "Negative" },
-              { value: "mixed", label: "Mixed" },
-            ]}
-          />
-          <SelectChip
-            value={theme}
-            onChange={(v) => setTheme(v as typeof theme)}
-            options={[{ value: "all", label: "All themes" }, ...themes.map((t) => ({ value: t, label: t }))]}
-          />
-          <SelectChip
-            icon={<ArrowUpDown className="h-3 w-3" />}
-            value={sort}
-            onChange={(v) => setSort(v as Sort)}
-            options={[
-              { value: "engagement", label: "Top engagement" },
-              { value: "recent", label: "Most recent" },
-            ]}
-          />
+          {preview ? (
+            onShowAll && (
+              <button
+                type="button"
+                onClick={onShowAll}
+                className="inline-flex h-8 items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-3 text-xs font-medium text-zinc-700 hover:bg-zinc-50"
+              >
+                See all comments
+                <ArrowRight className="h-3 w-3" />
+              </button>
+            )
+          ) : (
+            <>
+              <div className="relative">
+                <Search className="absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-400" />
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search comments"
+                  className="h-8 w-44 rounded-md border border-zinc-200 bg-white pl-7 pr-2 text-xs placeholder-zinc-400 focus:border-zinc-400 focus:outline-none"
+                />
+              </div>
+              <SelectChip
+                icon={<Filter className="h-3 w-3" />}
+                value={sentiment}
+                onChange={(v) => setSentiment(v as typeof sentiment)}
+                options={[
+                  { value: "all", label: "All sentiment" },
+                  { value: "positive", label: "Positive" },
+                  { value: "neutral", label: "Neutral" },
+                  { value: "negative", label: "Negative" },
+                  { value: "mixed", label: "Mixed" },
+                ]}
+              />
+              <SelectChip
+                value={theme}
+                onChange={(v) => setTheme(v as typeof theme)}
+                options={[{ value: "all", label: "All themes" }, ...themes.map((t) => ({ value: t, label: t }))]}
+              />
+              <SelectChip
+                icon={<ArrowUpDown className="h-3 w-3" />}
+                value={sort}
+                onChange={(v) => setSort(v as Sort)}
+                options={[
+                  { value: "engagement", label: "Top engagement" },
+                  { value: "recent", label: "Most recent" },
+                ]}
+              />
+            </>
+          )}
         </div>
       </header>
       <ul className="divide-y divide-zinc-100">
