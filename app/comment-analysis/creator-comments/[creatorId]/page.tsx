@@ -9,7 +9,6 @@ import { ThemesWithFlyout } from "@/components/analysis/ThemesWithFlyout";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { TopCommenters } from "@/components/analysis/TopCommenters";
 import { ActivityHeatmap } from "@/components/analysis/ActivityHeatmap";
-import { NotableComments } from "@/components/analysis/NotableComments";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { SeeAllCommentsButton } from "@/components/analysis/SeeAllCommentsButton";
 import { MetricCard } from "@/components/MetricCard";
@@ -160,8 +159,6 @@ export default async function CreatorDetailPage({
           <TopCommenters commenters={analysis.topCommenters} />
           <ActivityHeatmap cells={analysis.activityHeatmap} />
         </div>
-
-        <NotableComments notable={analysis.notableComments} />
 
         <section className="rounded-xl border border-zinc-200 bg-white p-5">
           <div className="mb-4 flex items-baseline justify-between">

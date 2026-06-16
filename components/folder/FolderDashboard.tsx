@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { ExecutiveSummary } from "@/components/analysis/ExecutiveSummary";
 import { SentimentDonut } from "@/components/analysis/SentimentDonut";
 import { ThemesWithFlyout } from "@/components/analysis/ThemesWithFlyout";
-import { NotableComments } from "@/components/analysis/NotableComments";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { TopCommenters } from "@/components/analysis/TopCommenters";
@@ -144,8 +143,6 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
         <TopCommenters commenters={analysis.topCommenters} />
         <ActivityHeatmap cells={analysis.activityHeatmap} />
       </div>
-
-      <NotableComments notable={analysis.notableComments} />
     </div>
   );
 }
