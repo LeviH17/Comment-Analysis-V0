@@ -132,13 +132,9 @@ export default async function CreatorDetailPage({
 
         <ExecutiveSummary text={analysis.executiveSummary} />
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
           <SentimentDonut sentiment={analysis.sentiment} total={analysis.totalComments} />
-          <ThemesWithFlyout
-            themes={analysis.themes}
-            allComments={commentSet}
-            flyoutSubtitle={`Theme view · ${creator.name}`}
-          />
+          <ActivityHeatmap cells={analysis.activityHeatmap} />
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -156,8 +152,12 @@ export default async function CreatorDetailPage({
         </div>
 
         <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
+          <ThemesWithFlyout
+            themes={analysis.themes}
+            allComments={commentSet}
+            flyoutSubtitle={`Theme view · ${creator.name}`}
+          />
           <TopCommenters commenters={analysis.topCommenters} />
-          <ActivityHeatmap cells={analysis.activityHeatmap} />
         </div>
 
         <section className="rounded-xl border border-zinc-200 bg-white p-5">

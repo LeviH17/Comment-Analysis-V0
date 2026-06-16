@@ -17,8 +17,8 @@ const SEG_LABEL: Record<keyof CommentAnalysisOutput["sentiment"], string> = {
 export function SentimentDonut({
   sentiment,
   total,
-  size = 180,
-  stroke = 20,
+  size = 150,
+  stroke = 18,
 }: {
   sentiment: CommentAnalysisOutput["sentiment"];
   total: number;

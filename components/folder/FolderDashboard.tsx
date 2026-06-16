@@ -116,13 +116,9 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
 
       <ExecutiveSummary text={analysis.executiveSummary} />
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
         <SentimentDonut sentiment={analysis.sentiment} total={analysis.totalComments} />
-        <ThemesWithFlyout
-          themes={analysis.themes}
-          allComments={commentSet}
-          flyoutSubtitle={`Theme view · ${folder.name}`}
-        />
+        <ActivityHeatmap cells={analysis.activityHeatmap} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -140,8 +136,12 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
       </div>
 
       <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
+        <ThemesWithFlyout
+          themes={analysis.themes}
+          allComments={commentSet}
+          flyoutSubtitle={`Theme view · ${folder.name}`}
+        />
         <TopCommenters commenters={analysis.topCommenters} />
-        <ActivityHeatmap cells={analysis.activityHeatmap} />
       </div>
     </div>
   );
