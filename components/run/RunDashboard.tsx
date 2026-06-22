@@ -1,16 +1,16 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { MessageSquare } from "lucide-react";
 import { ExecutiveSummary } from "@/components/analysis/ExecutiveSummary";
 import { SentimentDonut } from "@/components/analysis/SentimentDonut";
 import { ThemesWithFlyout } from "@/components/analysis/ThemesWithFlyout";
-import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { TopCommenters } from "@/components/analysis/TopCommenters";
 import { DemographicsFilterBar } from "@/components/analysis/DemographicsFilterBar";
+import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { SeeAllCommentsButton } from "@/components/analysis/SeeAllCommentsButton";
 import { MetricCard } from "@/components/MetricCard";
-import { PostFilterBar } from "@/components/folder/PostFilterBar";
-import { commentsForPosts } from "@/lib/mock/comments";
+import { PostPreview } from "@/components/post/PostPreview";
 import { deriveAnalysisOutput } from "@/lib/mock/analysisOutput";
 import {
   applyDemographicsFilter,
@@ -18,7 +18,7 @@ import {
   isDemographicsFilterActive,
 } from "@/lib/demographicsFilter";
 import { capitalize } from "@/lib/format";
-import type { Folder, Post, Sentiment } from "@/lib/types";
+import type { AnalysisRun, Comment, Post, Sentiment } from "@/lib/types";
 
 const fmt = new Intl.NumberFormat("en-US");
 
@@ -29,56 +29,51 @@ const SENTIMENT_DOT: Record<Sentiment, string> = {
   mixed: "bg-amber-500",
 };
 
-export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post[] }) {
-  const [selectedPostIds, setSelectedPostIds] = useState<Set<string>>(new Set());
+export function RunDashboard({
+  run,
+  currentPosts,
+  droppedPosts,
+  comments,
+  lastRefresh,
+}: {
+  run: AnalysisRun;
+  currentPosts: Post[];
+  droppedPosts: Post[];
+  comments: Comment[];
+  lastRefresh: string;
+}) {
   const [demoFilter, setDemoFilter] = useState(emptyDemographicsFilter);
 
-  const filteredPostIds = useMemo(() => {
-    if (selectedPostIds.size === 0) return folder.postIds;
-    return folder.postIds.filter((id) => selectedPostIds.has(id));
-  }, [selectedPostIds, folder.postIds]);
-
-  const postFilteredComments = useMemo(
-    () => commentsForPosts(filteredPostIds),
-    [filteredPostIds],
-  );
   const commentSet = useMemo(
-    () => applyDemographicsFilter(postFilteredComments, demoFilter),
-    [postFilteredComments, demoFilter],
+    () => applyDemographicsFilter(comments, demoFilter),
+    [comments, demoFilter],
   );
 
-  const postFilterActive =
-    selectedPostIds.size > 0 && selectedPostIds.size < folder.postIds.length;
   const demoActive = isDemographicsFilterActive(demoFilter);
-  const filterActive = postFilterActive || demoActive;
-
-  const summaryKey = filterActive ? `${folder.id}::filtered` : folder.id;
-  const summaryLabel = postFilterActive
-    ? `${folder.name} (${filteredPostIds.length} of ${folder.postIds.length} posts)`
-    : folder.name;
+  const summaryKey = demoActive ? `${run.id}::filtered` : run.id;
 
   const analysis = useMemo(
-    () => deriveAnalysisOutput(summaryKey, commentSet, summaryLabel),
-    [summaryKey, commentSet, summaryLabel],
+    () => deriveAnalysisOutput(summaryKey, commentSet, run.name),
+    [summaryKey, commentSet, run.name],
   );
 
-  const topSentiment = useMemo(() => {
-    const entries = Object.entries(analysis.sentiment) as Array<[Sentiment, number]>;
-    return entries.sort((a, b) => b[1] - a[1])[0];
-  }, [analysis.sentiment]);
-
+  const topSentimentEntries = Object.entries(analysis.sentiment) as Array<[Sentiment, number]>;
+  const topSentiment = [...topSentimentEntries].sort((a, b) => b[1] - a[1])[0];
   const topRegion = analysis.demographics.country[0];
 
   return (
     <div className="space-y-6">
-      <PostFilterBar
-        posts={posts}
-        selectedIds={selectedPostIds}
-        onChange={setSelectedPostIds}
-      />
+      <div className="-mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-zinc-500">
+        <span className="inline-flex items-center gap-1">
+          <MessageSquare className="h-3 w-3" />
+          Top-X cap: <span className="tabular-nums text-zinc-700">{run.topX}</span>
+        </span>
+        <span>·</span>
+        <span>Refreshes every 24h · last refresh {lastRefresh}</span>
+      </div>
 
       <DemographicsFilterBar
-        comments={postFilteredComments}
+        comments={comments}
         filter={demoFilter}
         onChange={setDemoFilter}
       />
@@ -90,24 +85,17 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
           sparkline={<VolumeSparkline points={analysis.volumeOverTime} />}
           footer={
             <SeeAllCommentsButton
-              title={folder.name}
-              subtitle={
-                postFilterActive
-                  ? `${folder.description ?? ""}${folder.description ? " · " : ""}Filtered to ${filteredPostIds.length} of ${folder.postIds.length} posts`
-                  : folder.description
-              }
+              title={run.name}
+              subtitle={run.query}
               comments={commentSet}
               analysis={analysis}
             />
           }
         />
         <MetricCard
-          label={postFilterActive ? "Posts in filter" : "Posts in folder"}
-          value={
-            postFilterActive
-              ? `${filteredPostIds.length} / ${folder.postIds.length}`
-              : posts.length
-          }
+          label="Posts in top-X"
+          value={`${currentPosts.length} / ${run.topX}`}
+          hint="Top posts by engagement currently in the analysis window"
         />
         <MetricCard
           label="Top sentiment"
@@ -146,8 +134,42 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
       <ThemesWithFlyout
         themes={analysis.themes}
         allComments={commentSet}
-        flyoutSubtitle={`Theme view · ${folder.name}`}
+        flyoutSubtitle={`Theme view · ${run.name}`}
       />
+
+      <section className="rounded-xl border border-zinc-200 bg-white p-5">
+        <div className="mb-4 flex items-baseline justify-between">
+          <div className="text-sm font-medium text-zinc-900">Top-X posts</div>
+          <span className="text-[11px] text-zinc-500">
+            {currentPosts.length} active
+            {droppedPosts.length > 0 ? ` · ${droppedPosts.length} dropped` : ""}
+          </span>
+        </div>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {currentPosts.map((p) => (
+            <PostPreview
+              key={p.id}
+              post={p}
+              trailing={
+                <span className="rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700">
+                  New
+                </span>
+              }
+            />
+          ))}
+          {droppedPosts.map((p) => (
+            <PostPreview
+              key={p.id}
+              post={p}
+              trailing={
+                <span className="rounded-full bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500">
+                  Dropped
+                </span>
+              }
+            />
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

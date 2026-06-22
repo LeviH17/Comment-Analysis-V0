@@ -4,13 +4,12 @@ import { useMemo, useState } from "react";
 import { ExecutiveSummary } from "@/components/analysis/ExecutiveSummary";
 import { SentimentDonut } from "@/components/analysis/SentimentDonut";
 import { ThemesWithFlyout } from "@/components/analysis/ThemesWithFlyout";
-import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { TopCommenters } from "@/components/analysis/TopCommenters";
 import { DemographicsFilterBar } from "@/components/analysis/DemographicsFilterBar";
+import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { SeeAllCommentsButton } from "@/components/analysis/SeeAllCommentsButton";
 import { MetricCard } from "@/components/MetricCard";
-import { PostFilterBar } from "@/components/folder/PostFilterBar";
-import { commentsForPosts } from "@/lib/mock/comments";
+import { PostPreview } from "@/components/post/PostPreview";
 import { deriveAnalysisOutput } from "@/lib/mock/analysisOutput";
 import {
   applyDemographicsFilter,
@@ -18,7 +17,7 @@ import {
   isDemographicsFilterActive,
 } from "@/lib/demographicsFilter";
 import { capitalize } from "@/lib/format";
-import type { Folder, Post, Sentiment } from "@/lib/types";
+import type { Comment, Creator, Post, Sentiment } from "@/lib/types";
 
 const fmt = new Intl.NumberFormat("en-US");
 
@@ -29,56 +28,38 @@ const SENTIMENT_DOT: Record<Sentiment, string> = {
   mixed: "bg-amber-500",
 };
 
-export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post[] }) {
-  const [selectedPostIds, setSelectedPostIds] = useState<Set<string>>(new Set());
+export function CreatorDashboard({
+  creator,
+  posts,
+  comments,
+}: {
+  creator: Creator;
+  posts: Post[];
+  comments: Comment[];
+}) {
   const [demoFilter, setDemoFilter] = useState(emptyDemographicsFilter);
 
-  const filteredPostIds = useMemo(() => {
-    if (selectedPostIds.size === 0) return folder.postIds;
-    return folder.postIds.filter((id) => selectedPostIds.has(id));
-  }, [selectedPostIds, folder.postIds]);
-
-  const postFilteredComments = useMemo(
-    () => commentsForPosts(filteredPostIds),
-    [filteredPostIds],
-  );
   const commentSet = useMemo(
-    () => applyDemographicsFilter(postFilteredComments, demoFilter),
-    [postFilteredComments, demoFilter],
+    () => applyDemographicsFilter(comments, demoFilter),
+    [comments, demoFilter],
   );
 
-  const postFilterActive =
-    selectedPostIds.size > 0 && selectedPostIds.size < folder.postIds.length;
   const demoActive = isDemographicsFilterActive(demoFilter);
-  const filterActive = postFilterActive || demoActive;
-
-  const summaryKey = filterActive ? `${folder.id}::filtered` : folder.id;
-  const summaryLabel = postFilterActive
-    ? `${folder.name} (${filteredPostIds.length} of ${folder.postIds.length} posts)`
-    : folder.name;
+  const summaryKey = demoActive ? `${creator.id}::filtered` : creator.id;
 
   const analysis = useMemo(
-    () => deriveAnalysisOutput(summaryKey, commentSet, summaryLabel),
-    [summaryKey, commentSet, summaryLabel],
+    () => deriveAnalysisOutput(summaryKey, commentSet, creator.name),
+    [summaryKey, commentSet, creator.name],
   );
 
-  const topSentiment = useMemo(() => {
-    const entries = Object.entries(analysis.sentiment) as Array<[Sentiment, number]>;
-    return entries.sort((a, b) => b[1] - a[1])[0];
-  }, [analysis.sentiment]);
-
+  const topSentimentEntries = Object.entries(analysis.sentiment) as Array<[Sentiment, number]>;
+  const topSentiment = [...topSentimentEntries].sort((a, b) => b[1] - a[1])[0];
   const topRegion = analysis.demographics.country[0];
 
   return (
     <div className="space-y-6">
-      <PostFilterBar
-        posts={posts}
-        selectedIds={selectedPostIds}
-        onChange={setSelectedPostIds}
-      />
-
       <DemographicsFilterBar
-        comments={postFilteredComments}
+        comments={comments}
         filter={demoFilter}
         onChange={setDemoFilter}
       />
@@ -90,24 +71,17 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
           sparkline={<VolumeSparkline points={analysis.volumeOverTime} />}
           footer={
             <SeeAllCommentsButton
-              title={folder.name}
-              subtitle={
-                postFilterActive
-                  ? `${folder.description ?? ""}${folder.description ? " · " : ""}Filtered to ${filteredPostIds.length} of ${folder.postIds.length} posts`
-                  : folder.description
-              }
+              title={creator.name}
+              subtitle={`${creator.handle} · Creator comment analysis`}
               comments={commentSet}
               analysis={analysis}
             />
           }
         />
         <MetricCard
-          label={postFilterActive ? "Posts in filter" : "Posts in folder"}
-          value={
-            postFilterActive
-              ? `${filteredPostIds.length} / ${folder.postIds.length}`
-              : posts.length
-          }
+          label="Posts tracked"
+          value={posts.length}
+          hint="Recent posts with comments analyzed"
         />
         <MetricCard
           label="Top sentiment"
@@ -146,8 +120,26 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
       <ThemesWithFlyout
         themes={analysis.themes}
         allComments={commentSet}
-        flyoutSubtitle={`Theme view · ${folder.name}`}
+        flyoutSubtitle={`Theme view · ${creator.name}`}
       />
+
+      <section className="rounded-xl border border-zinc-200 bg-white p-5">
+        <div className="mb-4 flex items-baseline justify-between">
+          <div className="text-sm font-medium text-zinc-900">Tracked posts</div>
+          <span className="text-[11px] text-zinc-500">{posts.length}</span>
+        </div>
+        {posts.length === 0 ? (
+          <div className="rounded-lg border border-dashed border-zinc-200 px-3 py-6 text-center text-xs text-zinc-500">
+            No posts ingested yet.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {posts.map((p) => (
+              <PostPreview key={p.id} post={p} />
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }
