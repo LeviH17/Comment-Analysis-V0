@@ -6,7 +6,6 @@ import type {
   DemographicBucket,
   Demographics,
   Gender,
-  HeatmapCell,
   NotableComment,
   Platform,
   Sentiment,
@@ -307,21 +306,6 @@ function aggregateTopCommenters(comments: Comment[], limit = 5): TopCommenter[] 
     .slice(0, limit);
 }
 
-function aggregateActivityHeatmap(comments: Comment[]): HeatmapCell[] {
-  const bucket = new Map<string, number>();
-  for (const c of comments) {
-    const d = new Date(c.postedAt);
-    const day = d.getUTCDay();
-    const hour = d.getUTCHours();
-    const key = `${day}-${hour}`;
-    bucket.set(key, (bucket.get(key) ?? 0) + 1);
-  }
-  return Array.from(bucket.entries()).map(([k, count]) => {
-    const [day, hour] = k.split("-").map(Number);
-    return { day, hour, count };
-  });
-}
-
 function volumeOverTime(comments: Comment[]): VolumePoint[] {
   const byDay = new Map<string, number>();
   for (const c of comments) {
@@ -349,7 +333,6 @@ export function deriveAnalysisOutput(
     volumeOverTime: volumeOverTime(comments),
     demographics: aggregateDemographics(comments),
     topCommenters: aggregateTopCommenters(comments),
-    activityHeatmap: aggregateActivityHeatmap(comments),
     totalComments: comments.length,
     lastRefreshedAt: "2026-05-22T15:00:00Z",
   };

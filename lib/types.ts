@@ -131,14 +131,6 @@ export type TopCommenter = {
   platforms: Platform[];
 };
 
-export type HeatmapCell = {
-  /** 0 = Sunday, 6 = Saturday (UTC) */
-  day: number;
-  /** 0–23 (UTC) */
-  hour: number;
-  count: number;
-};
-
 export type CommentAnalysisOutput = {
   executiveSummary: string;
   sentiment: {
@@ -153,7 +145,6 @@ export type CommentAnalysisOutput = {
   volumeOverTime: VolumePoint[];
   demographics: Demographics;
   topCommenters: TopCommenter[];
-  activityHeatmap: HeatmapCell[];
   totalComments: number;
   lastRefreshedAt: string;
 };

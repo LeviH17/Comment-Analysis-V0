@@ -7,7 +7,6 @@ import { ThemesWithFlyout } from "@/components/analysis/ThemesWithFlyout";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { TopCommenters } from "@/components/analysis/TopCommenters";
-import { ActivityHeatmap } from "@/components/analysis/ActivityHeatmap";
 import { SeeAllCommentsButton } from "@/components/analysis/SeeAllCommentsButton";
 import { MetricCard } from "@/components/MetricCard";
 import { PostFilterBar } from "@/components/folder/PostFilterBar";
@@ -118,7 +117,7 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
 
       <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
         <SentimentDonut sentiment={analysis.sentiment} total={analysis.totalComments} />
-        <ActivityHeatmap cells={analysis.activityHeatmap} />
+        <TopCommenters commenters={analysis.topCommenters} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -135,14 +134,11 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
         />
       </div>
 
-      <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
-        <ThemesWithFlyout
-          themes={analysis.themes}
-          allComments={commentSet}
-          flyoutSubtitle={`Theme view · ${folder.name}`}
-        />
-        <TopCommenters commenters={analysis.topCommenters} />
-      </div>
+      <ThemesWithFlyout
+        themes={analysis.themes}
+        allComments={commentSet}
+        flyoutSubtitle={`Theme view · ${folder.name}`}
+      />
     </div>
   );
 }

@@ -7,7 +7,6 @@ import { SentimentDonut } from "@/components/analysis/SentimentDonut";
 import { ThemesWithFlyout } from "@/components/analysis/ThemesWithFlyout";
 import { DemographicsBars, capitalize } from "@/components/analysis/DemographicsBars";
 import { TopCommenters } from "@/components/analysis/TopCommenters";
-import { ActivityHeatmap } from "@/components/analysis/ActivityHeatmap";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { SeeAllCommentsButton } from "@/components/analysis/SeeAllCommentsButton";
 import { MetricCard } from "@/components/MetricCard";
@@ -135,7 +134,7 @@ export default async function AnalysisRunDetailPage({
 
         <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
           <SentimentDonut sentiment={analysis.sentiment} total={analysis.totalComments} />
-          <ActivityHeatmap cells={analysis.activityHeatmap} />
+          <TopCommenters commenters={analysis.topCommenters} />
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -152,14 +151,11 @@ export default async function AnalysisRunDetailPage({
           />
         </div>
 
-        <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
-          <ThemesWithFlyout
-            themes={analysis.themes}
-            allComments={commentSet}
-            flyoutSubtitle={`Theme view · ${run.name}`}
-          />
-          <TopCommenters commenters={analysis.topCommenters} />
-        </div>
+        <ThemesWithFlyout
+          themes={analysis.themes}
+          allComments={commentSet}
+          flyoutSubtitle={`Theme view · ${run.name}`}
+        />
 
         <section className="rounded-xl border border-zinc-200 bg-white p-5">
           <div className="mb-4 flex items-baseline justify-between">
