@@ -6,7 +6,7 @@ import { SentimentDonut } from "@/components/analysis/SentimentDonut";
 import { ThemesWithFlyout } from "@/components/analysis/ThemesWithFlyout";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { TopCommenters } from "@/components/analysis/TopCommenters";
-import { DemographicsFilterBar } from "@/components/analysis/DemographicsFilterBar";
+import { FilterButton } from "@/components/analysis/FilterFlyout";
 import { SeeAllCommentsButton } from "@/components/analysis/SeeAllCommentsButton";
 import { MetricCard } from "@/components/MetricCard";
 import { PostFilterBar } from "@/components/folder/PostFilterBar";
@@ -77,11 +77,13 @@ export function FolderDashboard({ folder, posts }: { folder: Folder; posts: Post
         onChange={setSelectedPostIds}
       />
 
-      <DemographicsFilterBar
-        comments={postFilteredComments}
-        filter={demoFilter}
-        onChange={setDemoFilter}
-      />
+      <div className="flex justify-end">
+        <FilterButton
+          comments={postFilteredComments}
+          filter={demoFilter}
+          onChange={setDemoFilter}
+        />
+      </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard

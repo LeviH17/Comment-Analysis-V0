@@ -5,7 +5,7 @@ import { ExecutiveSummary } from "@/components/analysis/ExecutiveSummary";
 import { SentimentDonut } from "@/components/analysis/SentimentDonut";
 import { ThemesWithFlyout } from "@/components/analysis/ThemesWithFlyout";
 import { TopCommenters } from "@/components/analysis/TopCommenters";
-import { DemographicsFilterBar } from "@/components/analysis/DemographicsFilterBar";
+import { FilterButton } from "@/components/analysis/FilterFlyout";
 import { VolumeSparkline } from "@/components/analysis/VolumeSparkline";
 import { SeeAllCommentsButton } from "@/components/analysis/SeeAllCommentsButton";
 import { MetricCard } from "@/components/MetricCard";
@@ -58,11 +58,13 @@ export function CreatorDashboard({
 
   return (
     <div className="space-y-6">
-      <DemographicsFilterBar
-        comments={comments}
-        filter={demoFilter}
-        onChange={setDemoFilter}
-      />
+      <div className="flex justify-end">
+        <FilterButton
+          comments={comments}
+          filter={demoFilter}
+          onChange={setDemoFilter}
+        />
+      </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard
